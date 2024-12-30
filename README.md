@@ -18,13 +18,16 @@ Self-hosted **Javascript** emulation for various system.
 [![Button Usage]][Usage]<br>
 [![Button Configurator]][Configurator]<br>
 [![Button Demo]][Demo] 
-[![Button Legacy]][Legacy]
     
 [![Button Contributors]][Contributors]   
  
 Join our Discord server:
 
 [![Join our Discord server!](https://invidget.switchblade.xyz/6akryGkETU)](https://discord.gg/6akryGkETU)
+
+Or the Matrix server (#emulatorjs:matrix.emulatorjs.org):
+
+<a href="https://matrix.to/#/#emulatorjs:matrix.emulatorjs.org" rel="noopener" target="_blank"><img src="https://matrix.to/img/matrix-badge.svg" alt="Chat on Matrix"></a>
 
 </div>
 
@@ -63,7 +66,7 @@ Join our Discord server:
 <br>
 
 ### Versioning
-There are 3 different version name that you need to be aware of:
+There are three different version names that you need to be aware of:
 1. **stable** - This will be the most stable version of the emulator both code and cores will be tested before release. It will be updated every time a new version is released on GitHub. This is the default version on the Demo.
 2. **latest** - This will contain the latest code but use the stable cores. This will be updated every time the *main* branch is updated.
 3. **nightly** - This will contain the latest code and the latest cores. The cores will be updated every day, so this is consiterd alpha.
@@ -136,6 +139,18 @@ npm start
 **[Lynx][Atari Lynx]**   | 
 **[Jaguar][Atari Jaguar]**
 
+<br>
+<br>
+
+### Commodore
+
+**[Commodore 64]** |
+**[Commodore 128]** |
+**[Commodore Amiga]**
+
+**[Commodore PET]** |
+**[Commodore Plus/4]** |
+**[Commodore VIC-20]**
 
 <br>
 <br>
@@ -144,15 +159,24 @@ npm start
     
 **[PlayStation]**   | 
 **[Arcade]**   | 
-**[3DO]**   | 
-**[MAME 2003]**
+**[3DO]**
+
+**[MAME 2003]** |
+**[ColecoVision]**
     
 </div>
 
 <br>
 
-***PSP is not yet supported***. Some of y'all may have seen that I pushed a "beta" ppsspp core, but this core is not ready for daily use. It still crashes randomly and any games that use 3d (so like, all of them) will just have a white screen (and might just crash). Do not open issues related to the "psp" core.
+## Star History
 
+<a href="https://star-history.com/#EmulatorJS/EmulatorJS&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=EmulatorJS/EmulatorJS&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=EmulatorJS/EmulatorJS&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=EmulatorJS/EmulatorJS&type=Date" />
+ </picture>
+</a>
 
 <!-- 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 --->
 
@@ -168,46 +192,55 @@ npm start
 
 <!-- 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮   Quicklinks   🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 --->
 
-[Configurator]: https://emulatorjs.org/editor.html
+[Configurator]: https://emulatorjs.org/editor
 [Contributors]: docs/Contributors.md
 [Website]: https://emulatorjs.org/
-[Legacy]: https://coldcast.org/games/1/Super-Mario-Bros
 [Usage]: https://emulatorjs.org/docs/
 [Demo]: https://demo.emulatorjs.org/
 
 
 <!-- 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮  Systems  🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 -->
 
-[Nintendo Game Boy Advance]: https://emulatorjs.org/systems/Nintendo%20Game%20Boy%20Advance
-[Nintendo Game Boy]: https://emulatorjs.org/systems/Nintendo%20Game%20Boy
-[Nintendo 64]: https://emulatorjs.org/systems/Nintendo%2064
-[Nintendo DS]: https://emulatorjs.org/systems/Nintendo%20DS
+[Nintendo Game Boy Advance]: https://emulatorjs.org/docs/systems/nintendo-game-boy-advance
+[Nintendo Game Boy]: https://emulatorjs.org/docs/systems/nintendo-game-boy
+[Nintendo 64]: https://emulatorjs.org/docs/systems/nintendo-64
+[Nintendo DS]: https://emulatorjs.org/docs/systems/nintendo-ds
 
-[Sega Master System]: https://emulatorjs.org/systems/Sega%20Master%20System
-[Sega Mega Drive]: https://emulatorjs.org/systems/Sega%20Mega%20Drive
-[Sega Game Gear]: https://emulatorjs.org/systems/Sega%20Game%20Gear
-[Sega Saturn]: https://emulatorjs.org/systems/Sega%20Saturn
-[Sega 32X]: https://emulatorjs.org/systems/Sega%2032X
-[Sega CD]: https://emulatorjs.org/systems/Sega%20CD
+[Sega Master System]: https://emulatorjs.org/docs/systems/sega-master-system
+[Sega Mega Drive]: https://emulatorjs.org/docs/systems/sega-mega-drive
+[Sega Game Gear]: https://emulatorjs.org/docs/systems/sega-game-gear
+[Sega Saturn]: https://emulatorjs.org/docs/systems/sega-saturn
+[Sega 32X]: https://emulatorjs.org/docs/systems/sega-32x
+[Sega CD]: https://emulatorjs.org/docs/systems/sega-cd
 
-[Atari Jaguar]: https://emulatorjs.org/systems/Atari%20Jaguar
-[Atari Lynx]: https://emulatorjs.org/systems/Atari%20Lynx
-[Atari 7800]: https://emulatorjs.org/systems/Atari%207800
-[Atari 2600]: https://emulatorjs.org/systems/Atari%202600
-[Atari 5200]: https://emulatorjs.org/systems/Atari%205200
+[Atari Jaguar]: https://emulatorjs.org/docs/systems/atari-jaguar
+[Atari Lynx]: https://emulatorjs.org/docs/systems/atari-lynx
+[Atari 7800]: https://emulatorjs.org/docs/systems/atari-7800
+[Atari 2600]: https://emulatorjs.org/docs/systems/atari-2600
+[Atari 5200]: https://emulatorjs.org/docs/systems/atari-5200
 
-[NES / Famicom]: https://emulatorjs.org/systems/NES-Famicom
-[SNES]: https://emulatorjs.org/systems/SNES
+[NES / Famicom]: https://emulatorjs.org/docs/systems/nes-famicom
+[SNES]: https://emulatorjs.org/docs/systems/snes
 
+<!--
 [TurboGrafs-16 / PC Engine]: https://emulatorjs.org/systems/TurboGrafx-16
+[MSX]: https://emulatorjs.org/systems/MSX
 [WanderSwan / Color]: https://emulatorjs.org/systems/WonderSwan
 [Neo Geo Poket]: https://emulatorjs.org/systems/Neo%20Geo%20Pocket
-[PlayStation]: https://emulatorjs.org/systems/PlayStation
-[Virtual Boy]: https://emulatorjs.org/systems/Virtual%20Boy
-[Arcade]: https://emulatorjs.org/systems/Arcade
-[MSX]: https://emulatorjs.org/systems/MSX
-[3DO]: https://emulatorjs.org/systems/3DO
-[MAME 2003]: https://emulatorjs.org/systems/MAME%202003
+--->
+[PlayStation]: https://emulatorjs.org/docs/systems/playstation
+[Virtual Boy]: https://emulatorjs.org/docs/systems/virtual-boy
+[Arcade]: https://emulatorjs.org/docs/systems/arcade
+[3DO]: https://emulatorjs.org/docs/systems/3do
+[MAME 2003]: https://emulatorjs.org/docs/systems/mame-2003
+[ColecoVision]: https://emulatorjs.org/docs/systems/colecovision
+
+[Commodore 64]: https://emulatorjs.org/docs/systems/commodore-64
+[Commodore 128]: https://emulatorjs.org/docs/systems/commodore-128
+[Commodore Amiga]: https://emulatorjs.org/docs/systems/commodore-amiga
+[Commodore PET]: https://emulatorjs.org/docs/systems/commodore-pet
+[Commodore Plus/4]: https://emulatorjs.org/docs/systems/commodore-plus4
+[Commodore VIC-20]: https://emulatorjs.org/docs/systems/commodore-vic20
 
 
 <!-- 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮  Badges  🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 🎮 --->
@@ -217,7 +250,6 @@ npm start
 [Button Configurator]: https://img.shields.io/badge/Configurator-992cb3?style=for-the-badge
 [Button Contributors]: https://img.shields.io/badge/Contributors-54b7dd?style=for-the-badge
 [Button Website]: https://img.shields.io/badge/Website-736e9b?style=for-the-badge
-[Button Legacy]: https://img.shields.io/badge/Legacy-ab910b?style=for-the-badge
 [Button Usage]: https://img.shields.io/badge/Usage-2478b5?style=for-the-badge
 [Button Demo]: https://img.shields.io/badge/Demo-528116?style=for-the-badge
 [Button Beta]: https://img.shields.io/badge/Beta-bb044f?style=for-the-badge

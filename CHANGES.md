@@ -1,6 +1,65 @@
 # Changes
 
-# 4.0.11
+# 4.2.0
+
+In my opinion, this is the most stable release we've had in a while. Many features added in this release were just side affects of fixing up some bugs.
+
+- Let same_cdi core handle zipped bios file directly (Thanks to [@pastisme](https://github.com/pastisme))
+- Fix audio sliders/mute button (Thanks to [@n-at](https://github.com/n-at))
+- Add ability to rotate video (Thanks to [@allancoding](https://github.com/allancoding))
+- Added persian `fa-AF` language (Thanks to [@iits-reza](https://github.com/iits-reza))
+- Added more catches for a start-game error
+- Fixed default webgl2 option
+- Organized settings menu, by dividing entries into sub-menus
+- Fixed the EmulatorJS exit button
+- Added the ability to internally add configurable retroarch.cfg variables
+- Fixed default settings being saved to localstorage
+- Fixed in browser SRM saves (finally)
+- Read save state from WebAssembly Memory
+- Fixed an issue when loading PPSSPP assets
+- Refactored the internal downloadFile function to be promised based instead of callback based
+- Added checks if core requires threads or webgl2
+- Added ability to switch between cores in the settings menu
+- Added the ability to enable/disable threads if SharedArrayBuffer is defined
+- Added a PSP controller scheme for the control settings menu
+- Fixed the volume slider background height in firefox
+- Added handling for lightgun devices
+- Refactored the EmulatorJS `build-emulatorjs.sh` build script
+- Added `ppsspp` core
+
+# 4.1.1 [View Tree](https://github.com/EmulatorJS/EmulatorJS/tree/4951a28de05e072acbe939f46147645a91664a07)
+- Fixed 2xScaleHQ and 2xScaleHQ shaders (Thanks to [@n-at](https://github.com/n-at))
+- Added Vietnamese (`vi-VN`) (Thanks to [@TimKieu](https://github.com/TimKieu))
+- Disable CUE generation for the PUAE core (Thanks to [@michael-j-green](https://github.com/michael-j-green))
+- Updated German translation (Thanks to [@jonas0b1011001](https://github.com/jonas0b1011001))
+- Add missing calls to translate (Thanks to [@angelmarfil](https://github.com/angelmarfil))
+- Added Turkish (`tr-TR`) (Thanks to [@iGoodie](https://github.com/iGoodie))
+- Fixed Gamepad support for some older browsers (Thanks to [@ZhaoTonggang](https://github.com/ZhaoTonggang))
+- Default to webgl1 on lower end cores.
+- Added ability to switch between webgl1 and webgl2.
+- Check core compatibility with EmulatorJS.
+- Added core license to right-click menu.
+- Removed usage of `replaceAll`.
+- Added the ability to change settings on game start crash.
+- Added `exit` button, to properly shutdown and save files.
+- Fixed mouse on mobile devices.
+- Modularized EmulatorJS.
+- Fixed WHLoader hdf roms.
+- Added support for `File` objects (Thanks to [@pastisme](https://github.com/pastisme)).
+
+# 4.0.12 [View Tree](https://github.com/EmulatorJS/EmulatorJS/tree/c3ba473d1afc278db136f8e1252d0456050d6047)
+- Fix scroll bar css (Thanks to [@allancoding](https://github.com/allancoding))
+- Flip the context menu instead of going off the page
+- Add hooks for save files (Thanks to [@gantoine](https://github.com/gantoine))
+- Add class for each virtual gamepad button
+- Add `EJS_forceLegacyCores` option
+- Add `EJS_noAutoFocus` (this is only for advanced developers, not likely an option you will use)
+- Added supported Amiga file extensions (Thanks to [@michael-j-green](https://github.com/michael-j-green))
+- Display the file name of the ROM/disk when using M3U lists (Thanks to [@michael-j-green](https://github.com/michael-j-green))
+- Added vsync option
+- Added advanced shader configuration support (Thanks to [@n-at](https://github.com/n-at))
+
+# 4.0.11 [View Tree](https://github.com/EmulatorJS/EmulatorJS/tree/cafd80d023afa9562c7054e89a4240f3381d64ff)
 - Added the ability to disable localstorage using `EJS_disableLocalStorage`. (Thanks to [@n-at](https://github.com/n-at))
 - Added the ability to trigger `EJS_emulator.displayMessage` with a duration. (Thanks to [@allancoding](https://github.com/allancoding))
 - `EJS_emulator.gameManager.getState` now returns a Uint8Array instead of a promise.

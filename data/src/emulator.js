@@ -1,148 +1,74 @@
 class EmulatorJS {
-    version = 12; //Increase by 1 when cores are updated
-    getCore(generic) {
-        const core = this.config.system;
-        /*todo:
-        Systems: msx
-        
-        Cores:
-        - FreeChaF
-        - FreeIntv
-        - NeoCD
-        - O2EM
-        - Vecx
-        */
-        if (generic) {
-            const options = {
-                'a5200': 'atari5200',
-                'beetle_vb': 'vb',
-                'desmume': 'nds',
-                'desmume2015': 'nds',
-                'fbalpha2012_cps1': 'arcade',
-                'fbalpha2012_cps2': 'arcade',
-                'fbneo': 'arcade',
-                'fceumm': 'nes',
-                'gambatte': 'gb',
-                'gearcoleco': 'coleco',
-                'genesis_plus_gx': 'sega',
-                'handy': 'lynx',
-                'mame2003': 'mame',
-                'mame2003_plus': 'mame',
-                'mednafen_ngp': 'ngp',
-                'mednafen_pce': 'pce',
-                'mednafen_pcfx': 'pcfx',
-                'mednafen_psx_hw': 'psx',
-                'mednafen_wswan': 'ws',
-                'melonds': 'nds',
-                'mgba': 'gba',
-                'mupen64plus_next': 'n64',
-                'nestopia': 'nes',
-                'opera': '3do',
-                'parallel_n64': 'n64',
-                'pcsx_rearmed': 'psx',
-                'picodrive': 'sega',
-                'ppsspp': 'psp',
-                'prosystem': 'atari7800',
-                'snes9x': 'snes',
-                'stella2014': 'atari2600',
-                'virtualjaguar': 'jaguar',
-                'yabause': 'segaSaturn',
-                'puae': 'amiga',
-                'vice_x64sc': 'c64',
-                'vice_x128': 'c128',
-                'vice_xpet': 'pet',
-                'vice_xplus4': 'plus4',
-                'vice_xvic': 'vic20'
-            }
-            return options[core] || core;
+    getCores() {
+        let rv = {
+            "atari5200": ["a5200"],
+            "vb": ["beetle_vb"],
+            "nds": ["melonds", "desmume", "desmume2015"],
+            "arcade": ["fbneo", "fbalpha2012_cps1", "fbalpha2012_cps2"],
+            "nes": ["fceumm", "nestopia"],
+            "gb": ["gambatte"],
+            "coleco": ["gearcoleco"],
+            "sega": ["genesis_plus_gx", "picodrive"],
+            "segaMS": ["smsplus"],
+            "segaMD": ["genesis_plus_gx"],
+            "segaGG": ["genesis_plus_gx"],
+            "segaCD": ["genesis_plus_gx"],
+            "sega32x": ["picodrive"],
+            "lynx": ["handy"],
+            "mame": ["mame2003_plus", "mame2003"],
+            "ngp": ["mednafen_ngp"],
+            "pce": ["mednafen_pce"],
+            "pcfx": ["mednafen_pcfx"],
+            "psx": ["pcsx_rearmed", "mednafen_psx_hw"],
+            "ws": ["mednafen_wswan"],
+            "gba": ["mgba"],
+            "n64": ["mupen64plus_next", "parallel_n64"],
+            "3do": ["opera"],
+            "psp": ["ppsspp"],
+            "atari7800": ["prosystem"],
+            "snes": ["snes9x"],
+            "atari2600": ["stella2014"],
+            "jaguar": ["virtualjaguar"],
+            "segaSaturn": ["yabause"],
+            "amiga": ["puae"],
+            "c64": ["vice_x64sc"],
+            "c128": ["vice_x128"],
+            "pet": ["vice_xpet"],
+            "plus4": ["vice_xplus4"],
+            "vic20": ["vice_xvic"]
+        };
+        if (this.isSafari && this.isMobile) {
+            rv.n64 = rv.n64.reverse();
         }
-        const options = {
-            'jaguar': 'virtualjaguar',
-            'lynx': 'handy',
-            'segaSaturn': 'yabause',
-            'segaMS': 'smsplus',
-            'segaMD': 'genesis_plus_gx',
-            'segaGG': 'genesis_plus_gx',
-            'segaCD': 'genesis_plus_gx',
-            'sega32x': 'picodrive',
-            'atari2600': 'stella2014',
-            'atari7800': 'prosystem',
-            'nes': 'fceumm',
-            'snes': 'snes9x',
-            'atari5200': 'a5200',
-            'gb': 'gambatte',
-            'gba': 'mgba',
-            'vb': 'beetle_vb',
-            'n64': 'mupen64plus_next',
-            'nds': 'melonds',
-            'mame': 'mame2003_plus',
-            'arcade': 'fbneo',
-            'psx': 'pcsx_rearmed',
-            '3do': 'opera',
-            'psp': 'ppsspp',
-            'pce': 'mednafen_pce',
-            'pcfx': 'mednafen_pcfx',
-            'ngp': 'mednafen_ngp',
-            'ws': 'mednafen_wswan',
-            'coleco': 'gearcoleco',
-            'amiga': 'puae',
-            'c64': 'vice_x64sc',
-            'c128': 'vice_x128',
-            'pet': 'vice_xpet',
-            'plus4': 'vice_xplus4',
-            'vic20': 'vice_xvic'
-        }
-        if (this.isSafari && this.isMobile && this.getCore(true) === "n64") {
-            return "parallel_n64";
-        }
-        if (!this.supportsWebgl2 && this.getCore(true) === "psx") {
-            return "mednafen_psx_hw";
-        }
-        return options[core] || core;
+        return rv;
     }
-    extensions = {
-        'a5200': ['a52', 'bin'],
-        'amiga': ['adf', 'adz', 'dms', 'fdi', 'ipf', 'raw', 'hdf', 'hdz', 'lha', 'slave', 'info', 'cue', 'ccd', 'chd', 'nrg', 'mds', 'iso', 'uae', 'm3u', 'zip', '7z'],
-        'desmume': ['nds', 'bin'],
-        'desmume2015': ['nds', 'bin'],
-        'fbalpha2012_cps1': ['zip'],
-        'fbalpha2012_cps2': ['zip'],
-        'fbneo': ['zip', '7z'],
-        'fceumm': ['fds', 'nes', 'unif', 'unf'],
-        'gambatte': ['gb', 'gbc', 'dmg'],
-        'gearcoleco': ['col', 'cv', 'bin', 'rom'],
-        'genesis_plus_gx': ['m3u', 'mdx', 'md', 'smd', 'gen', 'bin', 'cue', 'iso', 'chd', 'bms', 'sms', 'gg', 'sg', '68k', 'sgd'],
-        'handy': ['lnx'],
-        'mame2003': ['zip'],
-        'mame2003_plus': ['zip'],
-        'mednafen_ngp': ['ngp', 'ngc'],
-        'mednafen_pce': ['pce', 'cue', 'ccd', 'iso', 'img', 'bin', 'chd'],
-        'mednafen_pcfx': ['cue', 'ccd', 'toc', 'chd'],
-        'mednafen_psx': ['cue', 'toc', 'm3u', 'ccd', 'exe', 'pbp', 'chd'],
-        'mednafen_wswan': ['ws', 'wsc', 'pc2'],
-        'mednafen_psx_hw': ['cue', 'toc', 'm3u', 'ccd', 'exe', 'pbp', 'chd'],
-        'beetle_vb': ['vb', 'vboy', 'bin'],
-        'melonds': ['nds'],
-        'mgba': ['gb', 'gbc', 'gba'],
-        'mupen64plus_next': ['n64', 'v64', 'z64', 'bin', 'u1', 'ndd', 'gb'],
-        'nestopia': ['fds', 'nes', 'unif', 'unf'],
-        'opera': ['iso', 'bin', 'chd', 'cue'],
-        'parallel_n64': ['n64', 'v64', 'z64', 'bin', 'u1', 'ndd', 'gb'],
-        'pcsx_rearmed': ['bin', 'cue', 'img', 'mdf', 'pbp', 'toc', 'cbn', 'm3u', 'ccd'],
-        'picodrive': ['bin', 'gen', 'smd', 'md', '32x', 'cue', 'iso', 'sms', '68k', 'chd'],
-        'ppsspp': ['elf', 'iso', 'cso', 'prx', 'pbp'],
-        'prosystem': ['a78', 'bin'],
-        'smsplus': ['m3u', 'mdx', 'md', 'smd', 'gen', 'bin', 'cue', 'iso', 'chd', 'bms', 'sms', 'gg', 'sg', '68k', 'sgd'],
-        'snes9x': ['smc', 'sfc', 'swc', 'fig', 'bs', 'st'],
-        'stella2014': ['a26', 'bin', 'zip'],
-        'vice_x64': ['d64', 'd6z', 'd71', 'd7z', 'd80', 'd81', 'd82', 'd8z', 'g64', 'g6z', 'g41', 'g4z', 'x64', 'x6z', 'nib', 'nbz', 'd2m', 'd4m', 't64', 'tap', 'tcrt', 'prg', 'p00', 'crt', 'bin', 'cmd', 'm3u', 'vfl', 'vsf', 'zip', '7z', 'gz', '20', '40', '60', 'a0', 'b0', 'rom'],
-        'vice_x64sc': ['d64', 'd6z', 'd71', 'd7z', 'd80', 'd81', 'd82', 'd8z', 'g64', 'g6z', 'g41', 'g4z', 'x64', 'x6z', 'nib', 'nbz', 'd2m', 'd4m', 't64', 'tap', 'tcrt', 'prg', 'p00', 'crt', 'bin', 'cmd', 'm3u', 'vfl', 'vsf', 'zip', '7z', 'gz', '20', '40', '60', 'a0', 'b0', 'rom'],
-        'vice_x128': ['d64', 'd6z', 'd71', 'd7z', 'd80', 'd81', 'd82', 'd8z', 'g64', 'g6z', 'g41', 'g4z', 'x64', 'x6z', 'nib', 'nbz', 'd2m', 'd4m', 't64', 'tap', 'tcrt', 'prg', 'p00', 'crt', 'bin', 'cmd', 'm3u', 'vfl', 'vsf', 'zip', '7z', 'gz', '20', '40', '60', 'a0', 'b0', 'rom'],
-        'vice_xpet': ['d64', 'd6z', 'd71', 'd7z', 'd80', 'd81', 'd82', 'd8z', 'g64', 'g6z', 'g41', 'g4z', 'x64', 'x6z', 'nib', 'nbz', 'd2m', 'd4m', 't64', 'tap', 'tcrt', 'prg', 'p00', 'crt', 'bin', 'cmd', 'm3u', 'vfl', 'vsf', 'zip', '7z', 'gz', '20', '40', '60', 'a0', 'b0', 'rom'],
-        'vice_xplus4': ['d64', 'd6z', 'd71', 'd7z', 'd80', 'd81', 'd82', 'd8z', 'g64', 'g6z', 'g41', 'g4z', 'x64', 'x6z', 'nib', 'nbz', 'd2m', 'd4m', 't64', 'tap', 'tcrt', 'prg', 'p00', 'crt', 'bin', 'cmd', 'm3u', 'vfl', 'vsf', 'zip', '7z', 'gz', '20', '40', '60', 'a0', 'b0', 'rom'],
-        'vice_xvic': ['d64', 'd6z', 'd71', 'd7z', 'd80', 'd81', 'd82', 'd8z', 'g64', 'g6z', 'g41', 'g4z', 'x64', 'x6z', 'nib', 'nbz', 'd2m', 'd4m', 't64', 'tap', 'tcrt', 'prg', 'p00', 'crt', 'bin', 'cmd', 'm3u', 'vfl', 'vsf', 'zip', '7z', 'gz', '20', '40', '60', 'a0', 'b0', 'rom'],
-        'virtualjaguar': ['j64', 'jag', 'rom', 'abs', 'cof', 'bin', 'prg'],
-        'yabause': ['cue', 'iso', 'ccd', 'mds', 'chd', 'zip', 'm3u']
+    requiresThreads(core) {
+        const requiresThreads = ["ppsspp"];
+        return requiresThreads.includes(core);
+    }
+    requiresWebGL2(core) {
+        const requiresWebGL2 = ["ppsspp"];
+        return requiresWebGL2.includes(core);
+    }
+    getCore(generic) {
+        const cores = this.getCores();
+        const core = this.config.system;
+        if (generic) {
+            for (const k in cores) {
+                if (cores[k].includes(core)) {
+                    return k;
+                }
+            }
+            return core;
+        }
+        const gen = this.getCore(true);
+        if (cores[gen].includes(this.preGetSetting("retroarch_core"))) {
+            return this.preGetSetting("retroarch_core");
+        }
+        if (cores[core]) {
+            return cores[core][0];
+        }
+        return core;
     }
     createElement(type) {
         return document.createElement(type);
@@ -163,30 +89,47 @@ class EmulatorJS {
             data[i].elem.removeEventListener(data[i].listener, data[i].cb);
         }
     }
-    downloadFile(path, cb, progressCB, notWithPath, opts) {
-        const data = this.toData(path);//check other data types
-        if (data) {
-            data.then((game) => {
+    downloadFile(path, progressCB, notWithPath, opts) {
+        return new Promise(async cb => {
+            const data = this.toData(path);//check other data types
+            if (data) {
+                data.then((game) => {
+                    if (opts.method === 'HEAD') {
+                        cb({headers:{}});
+                    } else {
+                        cb({headers:{}, data:game});
+                    }
+                })
+                return;
+            }
+            const basePath = notWithPath ? '' : this.config.dataPath;
+            path = basePath + path;
+            if (!notWithPath && this.config.filePaths && typeof this.config.filePaths[path.split('/').pop()] === "string") {
+                path = this.config.filePaths[path.split('/').pop()];
+            }
+            let url;
+            try {url=new URL(path)}catch(e){};
+            if (url && !['http:', 'https:'].includes(url.protocol)) {
+                //Most commonly blob: urls. Not sure what else it could be
                 if (opts.method === 'HEAD') {
                     cb({headers:{}});
                     return;
-                } else {
-                    cb({headers:{}, data:game});
-                    return;
                 }
-            })
-            return;
-        }
-        const basePath = notWithPath ? '' : this.config.dataPath;
-        path = basePath + path;
-        if (!notWithPath && this.config.filePaths) {
-            if (typeof this.config.filePaths[path.split('/').pop()] === "string") {
-                path = this.config.filePaths[path.split('/').pop()];
+                try {
+                    let res = await fetch(path)
+                    if ((opts.type && opts.type.toLowerCase() === 'arraybuffer') || !opts.type) {
+                        res = await res.arrayBuffer();
+                    } else {
+                        res = await res.text();
+                        try {res = JSON.parse(res)} catch(e) {}
+                    }
+                    if (path.startsWith('blob:')) URL.revokeObjectURL(path);
+                    cb({data: res, headers: {}});
+                } catch(e) {
+                    cb(-1);
+                }
+                return;
             }
-        }
-        let url;
-        try {url=new URL(path)}catch(e){};
-        if ((url && ['http:', 'https:'].includes(url.protocol)) || !url) {
             const xhr = new XMLHttpRequest();
             if (progressCB instanceof Function) {
                 xhr.addEventListener('progress', (e) => {
@@ -214,32 +157,7 @@ class EmulatorJS {
             xhr.onerror = () => cb(-1);
             xhr.open(opts.method, path, true);
             xhr.send();
-        } else {
-            (async () => {
-                //Most commonly blob: urls. Not sure what else it could be
-                if (opts.method === 'HEAD') {
-                    cb({headers:{}});
-                    return;
-                }
-                let res;
-                try {
-                    res = await fetch(path);
-                    if ((opts.type && opts.type.toLowerCase() === 'arraybuffer') || !opts.type) {
-                        res = await res.arrayBuffer();
-                    } else {
-                        res = await res.text();
-                        try {res = JSON.parse(res)} catch(e) {}
-                    }
-                } catch(e) {
-                    cb(-1);
-                }
-                if (path.startsWith('blob:')) URL.revokeObjectURL(path);
-                cb({
-                    data: res,
-                    headers: {}
-                });
-            })();
-        }
+        })
     }
     toData(data, rv) {
         if (!(data instanceof ArrayBuffer) && !(data instanceof Uint8Array) && !(data instanceof Blob)) return null;
@@ -256,29 +174,45 @@ class EmulatorJS {
         })
     }
     checkForUpdates() {
-        fetch('https://cdn.emulatorjs.org/stable/data/version.json').then(response => {
+        if (this.ejs_version.endsWith("-beta")) {
+            console.warn("Using EmulatorJS beta. Not checking for updates. This instance may be out of date. Using stable is highly recommended unless you build and ship your own cores.");
+            return;
+        }
+        fetch("https://cdn.emulatorjs.org/stable/data/version.json").then(response => {
             if (response.ok) {
                 response.text().then(body => {
                     let version = JSON.parse(body);
-                    if (this.ejs_num_version < version.current_version) {
-                        console.log('Using EmulatorJS version ' + this.ejs_num_version + ' but the newest version is ' + version.current_version + '\nopen https://github.com/EmulatorJS/EmulatorJS to update');
+                    if (this.versionAsInt(this.ejs_version) < this.versionAsInt(version.version)) {
+                        console.log('Using EmulatorJS version ' + this.ejs_version + ' but the newest version is ' + version.current_version + '\nopen https://github.com/EmulatorJS/EmulatorJS to update');
                     }
                 })
             }
         })
     }
+    versionAsInt(ver) {
+        if (ver.endsWith("-beta")) {
+            return 99999999;
+        }
+        let rv = ver.split(".");
+        if (rv[rv.length-1].length === 1) {
+            rv[rv.length-1] = "0" + rv[rv.length-1];
+        }
+        return parseInt(rv.join(""));
+    }
     constructor(element, config) {
-        this.ejs_version = "4.0.11";
-        this.ejs_num_version = 401.1;
+        this.ejs_version = "4.2.0";
+        this.extensions = [];
+        this.initControlVars();
         this.debug = (window.EJS_DEBUG_XX === true);
         if (this.debug || (window.location && ['localhost', '127.0.0.1'].includes(location.hostname))) this.checkForUpdates();
         this.netplayEnabled = (window.EJS_DEBUG_XX === true) && (window.EJS_EXPERIMENTAL_NETPLAY === true);
-        this.settingsLanguage = window.EJS_settingsLanguage || false;
         this.config = config;
+        this.config.settingsLanguage = window.EJS_settingsLanguage || false;
         this.currentPopup = null;
         this.isFastForward = false;
         this.isSlowMotion = false;
-        this.rewindEnabled = this.loadRewindEnabled();
+        this.failedToStart = false;
+        this.rewindEnabled = this.preGetSetting("rewindEnabled") === 'enabled';
         this.touch = false;
         this.cheats = [];
         this.started = false;
@@ -303,10 +237,21 @@ class EmulatorJS {
         })();
         this.canvas = this.createElement('canvas');
         this.canvas.classList.add('ejs_canvas');
+        this.videoRotation = ([0, 1, 2, 3].includes(this.config.videoRotation)) ? this.config.videoRotation : this.preGetSetting("videoRotation") || 0;
         this.bindListeners();
         this.config.netplayUrl = this.config.netplayUrl || "https://netplay.emulatorjs.org";
         this.fullscreen = false;
+        this.enableMouseLock = false;
         this.supportsWebgl2 = !!document.createElement('canvas').getContext('webgl2') && (this.config.forceLegacyCores !== true);
+        this.webgl2Enabled = (() => {
+            let setting = this.preGetSetting("webgl2Enabled");
+            if (setting === "disabled" || !this.supportsWebgl2) {
+                return false;
+            } else if (setting === "enabled") {
+                return true;
+            }
+            return null;
+        })();
         this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
         if (this.config.disableDatabases) {
             this.storage = {
@@ -422,7 +367,7 @@ class EmulatorJS {
         })
         
     }
-    adBlocked(url, del){
+    adBlocked(url, del) {
         if (del){
             document.querySelector('div[class="ejs_ad_iframe"]').remove();
         } else {
@@ -433,12 +378,13 @@ class EmulatorJS {
             this.setupAds(this.config.adUrl, this.config.adSize[0], this.config.adSize[1]);
         }
     }
-    functions = {};
     on(event, func) {
+        if (!this.functions) this.functions = {};
         if (!Array.isArray(this.functions[event])) this.functions[event] = [];
         this.functions[event].push(func);
     }
     callEvent(event, data) {
+        if (!this.functions) this.functions = {};
         if (!Array.isArray(this.functions[event])) return 0;
         this.functions[event].forEach(e => e(data));
         return this.functions[event].length;
@@ -520,136 +466,54 @@ class EmulatorJS {
         }
         return text;
     }
-    isCompressed(data) { //https://www.garykessler.net/library/file_sigs.html
-        //todo. Use hex instead of numbers
-        if ((data[0] === 80 && data[1] === 75) && ((data[2] === 3 && data[3] === 4) || (data[2] === 5 && data[3] === 6) || (data[2] === 7 && data[3] === 8))) {
-            return 'zip';
-        } else if (data[0] === 55 && data[1] === 122 && data[2] === 188 && data[3] === 175 && data[4] === 39 && data[5] === 28) {
-            return '7z';
-        } else if ((data[0] === 82 && data[1] === 97 && data[2] === 114 && data[3] === 33 && data[4] === 26 && data[5] === 7) && ((data[6] === 0) || (data[6] === 1 && data[7] == 0))) {
-            return 'rar';
-        }
-    }
     checkCompression(data, msg, fileCbFunc) {
+        if (!this.compression) {
+            this.compression = new window.EJS_COMPRESSION(this);
+        }
         if (msg) {
             this.textElem.innerText = msg;
         }
-        //to be put in another file
-        const createWorker = (path) => {
-            return new Promise((resolve, reject) => {
-                this.downloadFile(path, (res) => {
-                    if (res === -1) {
-                        this.textElem.innerText = this.localization('Network Error');
-                        this.textElem.style.color = "red";
-                        return;
-                    }
-                    const blob = new Blob([res.data], {
-                        'type': 'application/javascript'
-                    })
-                    const url = window.URL.createObjectURL(blob);
-                    resolve(new Worker(url));
-                }, null, false, {responseType: "arraybuffer", method: "GET"});
-            })
+        return this.compression.decompress(data, (m, appendMsg) => {
+            this.textElem.innerText = appendMsg ? (msg + m) : m;
+        }, fileCbFunc);
+    }
+    checkCoreCompatibility(version) {
+        if (this.versionAsInt(version.minimumEJSVersion) > this.versionAsInt(this.ejs_version)) {
+            this.startGameError(this.localization("Outdated EmulatorJS version"));
+            throw new Error("Core requires minimum EmulatorJS version of " + version.minimumEJSVersion);
         }
-        const files = {};
-        let res;
-        const onMessage = (data) => {
-            if (!data.data) return;
-            //data.data.t/ 4=progress, 2 is file, 1 is zip done
-            if (data.data.t === 4 && msg) {
-                const pg = data.data;
-                const num = Math.floor(pg.current / pg.total * 100);
-                if (isNaN(num)) return;
-                const progress = ' '+num.toString()+'%';
-                this.textElem.innerText = msg + progress;
-            }
-            if (data.data.t === 2) {
-                if (typeof fileCbFunc === "function") {
-                    fileCbFunc(data.data.file, data.data.data);
-                    files[data.data.file] = true;
-                } else {
-                    files[data.data.file] = data.data.data;
-                }
-            }
-            if (data.data.t === 1) {
-                res(files);
-            }
-        }
-        const decompress7z = (file) => {
-            return new Promise((resolve, reject) => {
-                res = resolve;
-                
-                createWorker('compression/extract7z.js').then((worker) => {
-                    worker.onmessage = onMessage;
-                    worker.postMessage(file);
-                    //console.log(file);
-                })
-            })
-        }
-        const decompressRar = (file) => {
-            return new Promise((resolve, reject) => {
-                res = resolve;
-                
-                this.downloadFile("compression/libunrar.js", (res) => {
-                    this.downloadFile("compression/libunrar.wasm", (res2) => {
-                        if (res === -1 || res2 === -1) {
-                            this.textElem.innerText = this.localization('Network Error');
-                            this.textElem.style.color = "red";
-                            return;
-                        }
-                        const path = URL.createObjectURL(new Blob([res2.data], {type: "application/wasm"}));
-                        let data = '\nlet dataToPass = [];\nModule = {\n    monitorRunDependencies: function(left)  {\n        if (left == 0) {\n            setTimeout(function() {\n                unrar(dataToPass, null);\n            }, 100);\n        }\n    },\n    onRuntimeInitialized: function() {\n    },\n    locateFile: function(file) {\n        return \''+path+'\';\n    }\n};\n'+res.data+'\nlet unrar = function(data, password) {\n    let cb = function(fileName, fileSize, progress) {\n        postMessage({"t":4,"current":progress,"total":fileSize, "name": fileName});\n    };\n\n    let rarContent = readRARContent(data.map(function(d) {\n        return {\n            name: d.name,\n            content: new Uint8Array(d.content)\n        }\n    }), password, cb)\n    let rec = function(entry) {\n        if (!entry) return;\n        if (entry.type === \'file\') {\n            postMessage({"t":2,"file":entry.fullFileName,"size":entry.fileSize,"data":entry.fileContent});\n        } else if (entry.type === \'dir\') {\n            Object.keys(entry.ls).forEach(function(k) {\n                rec(entry.ls[k]);\n            })\n        } else {\n            throw "Unknown type";\n        }\n    }\n    rec(rarContent);\n    postMessage({"t":1});\n    return rarContent;\n};\nonmessage = function(data) {\n    dataToPass.push({name:  \'test.rar\', content: data.data});\n};\n                ';
-                        const blob = new Blob([data], {
-                            'type': 'application/javascript'
-                        })
-                        const url = window.URL.createObjectURL(blob);
-                        const worker = new Worker(url);
-                        worker.onmessage = onMessage;
-                        worker.postMessage(file);
-                    }, null, false, {responseType: "arraybuffer", method: "GET"})
-                }, null, false, {responseType: "text", method: "GET"});
-                
-            })
-        }
-        const decompressZip = (file) => {
-            return new Promise((resolve, reject) => {
-                res = resolve;
-                
-                createWorker('compression/extractzip.js').then((worker) => {
-                    worker.onmessage = onMessage;
-                    worker.postMessage(file);
-                })
-            })
-        }
-        const compression = this.isCompressed(data.slice(0, 10));
-        if (compression) {
-            //Need to do zip and rar still
-            if (compression === "7z") {
-                return decompress7z(data);
-            } else if (compression === "zip") {
-                return decompressZip(data);
-            } else if (compression === "rar") {
-                return decompressRar(data);
-            }
-        } else {
-            if (typeof fileCbFunc === "function") {
-                fileCbFunc("!!notCompressedData", data);
-                return new Promise(resolve => resolve({"!!notCompressedData": true}));
-            } else {
-                return new Promise(resolve => resolve({"!!notCompressedData": data}));
-            }
-        }
-        
+    }
+    startGameError(message) {
+        console.log(message);
+        this.textElem.innerText = message;
+        this.textElem.style.color = "red";
+        this.textElem.style.bottom = "10%";
+
+        this.setupSettingsMenu();
+        this.loadSettings();
+
+        this.menu.failedToStart();
+        this.handleResize();
+        this.failedToStart = true;
     }
     downloadGameCore() {
         this.textElem.innerText = this.localization("Download Game Core");
-        if (this.config.threads && ((typeof window.SharedArrayBuffer) !== "function")) {
-            this.textElem.innerText = this.localization('Error for site owner')+"\n"+this.localization("Check console");
-            this.textElem.style.color = "red";
+        if (!this.config.threads && this.requiresThreads(this.getCore())) {
+            this.startGameError(this.localization('Error for site owner')+"\n"+this.localization("Check console"));
+            console.warn("This core requires threads, but EJS_threads is not set!");
+            return;
+        }
+        if (!this.supportsWebgl2 && this.requiresWebGL2(this.getCore())) {
+            this.startGameError(this.localization("Outdated graphics driver"));
+            return;
+        }
+        if (this.config.threads && typeof window.SharedArrayBuffer !== "function") {
+            this.startGameError(this.localization('Error for site owner')+"\n"+this.localization("Check console"));
             console.warn("Threads is set to true, but the SharedArrayBuffer function is not exposed. Threads requires 2 headers to be set when sending you html page. See https://stackoverflow.com/a/68630724");
             return;
         }
         const gotCore = (data) => {
+            this.defaultCoreOpts = {};
             this.checkCompression(new Uint8Array(data), this.localization("Decompress Game Core")).then((data) => {
                 let js, thread, wasm;
                 for (let k in data) {
@@ -659,57 +523,91 @@ class EmulatorJS {
                         thread = data[k];
                     } else if (k.endsWith(".js")) {
                         js = data[k];
+                    } else if (k === "build.json") {
+                        this.checkCoreCompatibility(JSON.parse(new TextDecoder().decode(data[k])));
+                    } else if (k === "core.json") {
+                        let core = JSON.parse(new TextDecoder().decode(data[k]));
+                        this.extensions = core.extensions;
+                        this.coreName = core.name;
+                        this.repository = core.repo;
+                        this.defaultCoreOpts = core.options;
+                        this.enableMouseLock = core.options.supportsMouse;
+                        this.retroarchOpts = core.retroarchOpts;
+                    } else if (k === "license.txt") {
+                        this.license = new TextDecoder().decode(data[k]);
                     }
                 }
                 this.initGameCore(js, wasm, thread);
             });
         }
-        let legacy = (this.supportsWebgl2 ? "" : "-legacy");
-        let filename = this.getCore()+(this.config.threads ? "-thread" : "")+legacy+"-wasm.data";
-        this.storage.core.get(filename).then((result) => {
-            if (result && result.version === this.version && !this.debug) {
-                gotCore(result.data);
-                return;
+        const report = "cores/reports/" + this.getCore() + ".json";
+        this.downloadFile(report, null, false, {responseType: "text", method: "GET"}).then(async rep => {
+            if (rep === -1 || typeof rep === "string" || typeof rep.data === "string") {
+                rep = {};
+            } else {
+                rep = rep.data;
             }
-            let corePath = 'cores/'+filename;
-            this.downloadFile(corePath, (res) => {
-                if (res === -1) {
-                    console.log("File not found, attemping to fetch from emulatorjs cdn");
-                    this.downloadFile("https://cdn.emulatorjs.org/stable/data/"+corePath, (res) => {
-                        if (res === -1) {
-                            if (!this.supportsWebgl2) {
-                                this.textElem.innerText = this.localization('Outdated graphics driver');
-                            } else {
-                                this.textElem.innerText = this.localization('Network Error');
-                            }
-                            this.textElem.style.color = "red";
-                            return;
-                        }
-                        console.warn("File was not found locally, but was found on the emulatorjs cdn.\nIt is recommended to download the latest release from here: https://cdn.emulatorjs.org/releases/");
-                        gotCore(res.data);
-                        this.storage.core.put(filename, {
-                            version: this.version,
-                            data: res.data
-                        });
-                    }, (progress) => {
-                        this.textElem.innerText = this.localization("Download Game Core") + progress;
-                    }, true, {responseType: "arraybuffer", method: "GET"})
+            if (!rep.buildStart) {
+                rep.buildStart = Math.random() * 100;
+            }
+            if (this.webgl2Enabled === null) {
+                this.webgl2Enabled = rep.options ? rep.options.defaultWebGL2 : false;
+            }
+            if (this.requiresWebGL2(this.getCore())) {
+                this.webgl2Enabled = true;
+            }
+            let threads = false;
+            if (typeof window.SharedArrayBuffer === "function") {
+                const opt = this.preGetSetting("ejs_threads");
+                if (opt) {
+                    threads = (opt === "enabled");
+                } else {
+                    threads = this.config.threads;
+                }
+            }
+
+            let legacy = (this.supportsWebgl2 && this.webgl2Enabled ? "" : "-legacy");
+            let filename = this.getCore()+(threads ? "-thread" : "")+legacy+"-wasm.data";
+            if (!this.debug) {
+                const result = await this.storage.core.get(filename);
+                if (result && result.version === rep.buildStart) {
+                    gotCore(result.data);
                     return;
                 }
-                gotCore(res.data);
-                this.storage.core.put(filename, {
-                    version: this.version,
-                    data: res.data
-                });
-            }, (progress) => {
+            }
+            const corePath = 'cores/'+filename;
+            let res = await this.downloadFile(corePath, (progress) => {
                 this.textElem.innerText = this.localization("Download Game Core") + progress;
             }, false, {responseType: "arraybuffer", method: "GET"});
-        })
+            if (res === -1) {
+                console.log("File not found, attemping to fetch from emulatorjs cdn");
+                console.error("**THIS METHOD IS A FAILSAFE, AND NOT OFFICIALLY SUPPORTED. USE AT YOUR OWN RISK**");
+                res = await this.downloadFile(`https://cdn.emulatorjs.org/${this.ejs_version}/data/${corePath}`, (progress) => {
+                    this.textElem.innerText = this.localization("Download Game Core") + progress;
+                }, true, {responseType: "arraybuffer", method: "GET"});
+                if (res === -1) {
+                    if (!this.supportsWebgl2) {
+                        this.startGameError(this.localization('Outdated graphics driver'));
+                    } else {
+                        this.startGameError(this.localization('Network Error'));
+                    }
+                    return;
+                }
+                console.warn("File was not found locally, but was found on the emulatorjs cdn.\nIt is recommended to download the stable release from here: https://cdn.emulatorjs.org/releases/");
+            }
+            gotCore(res.data);
+            this.storage.core.put(filename, {
+                version: rep.buildStart,
+                data: res.data
+            });
+        });
     }
     initGameCore(js, wasm, thread) {
-        this.initModule(wasm, thread);
         let script = this.createElement("script");
         script.src = URL.createObjectURL(new Blob([js], {type: "application/javascript"}));
+        script.addEventListener("load", () => {
+            this.initModule(wasm, thread);
+        });
         document.body.appendChild(script);
     }
     getBaseFileName(force) {
@@ -751,10 +649,11 @@ class EmulatorJS {
             }
             this.textElem.innerText = this.localization("Download Game State");
             
-            this.downloadFile(this.config.loadState, (res) => {
+            this.downloadFile(this.config.loadState, (progress) => {
+                this.textElem.innerText = this.localization("Download Game State") + progress;
+            }, true, {responseType: "arraybuffer", method: "GET"}).then((res) => {
                 if (res === -1) {
-                    this.textElem.innerText = this.localization('Network Error');
-                    this.textElem.style.color = "red";
+                    this.startGameError(this.localization('Network Error'));
                     return;
                 }
                 this.on("start", () => {
@@ -763,173 +662,83 @@ class EmulatorJS {
                     }, 10);
                 })
                 resolve();
-            }, (progress) => {
-                this.textElem.innerText = this.localization("Download Game State") + progress;
-            }, true, {responseType: "arraybuffer", method: "GET"});
+            });
         })
+    }
+    downloadGameFile(assetUrl, type, progressMessage, decompressProgressMessage) {
+        return new Promise(async (resolve, reject) => {
+            if ((typeof assetUrl !== "string" || !assetUrl.trim()) && !this.toData(assetUrl, true)) {
+                return resolve(assetUrl);
+            }
+            const gotData = async (input) => {
+                const data = await this.checkCompression(new Uint8Array(input), decompressProgressMessage);
+                for (const k in data) {
+                    if (k === "!!notCompressedData") {
+                        this.gameManager.FS.writeFile(assetUrl.split('/').pop().split("#")[0].split("?")[0], data[k]);
+                        break;
+                    }
+                    if (k.endsWith('/')) continue;
+                    this.gameManager.FS.writeFile("/" + k.split('/').pop(), data[k]);
+                }
+            }
+            
+            this.textElem.innerText = progressMessage;
+            if (!this.debug) {
+                const res = await this.downloadFile(assetUrl, null, true, {method: "HEAD"});
+                const result = await this.storage.rom.get(assetUrl.split("/").pop());
+                if (result && result['content-length'] === res.headers['content-length'] && result.type === type) {
+                    await gotData(result.data);
+                    return resolve(assetUrl);
+                }
+            }
+            const res = await this.downloadFile(assetUrl, (progress) => {
+                this.textElem.innerText = progressMessage + progress;
+            }, true, {responseType: "arraybuffer", method: "GET"});
+            if (res === -1) {
+                this.startGameError(this.localization("Network Error"));
+                resolve(assetUrl);
+                return;
+            }
+            if (assetUrl instanceof File) {
+                assetUrl = assetUrl.name;
+            } else if (this.toData(assetUrl, true)) {
+                assetUrl = "game";
+            }
+            await gotData(res.data);
+            resolve(assetUrl);
+            const limit = (typeof this.config.cacheLimit === "number") ? this.config.cacheLimit : 1073741824;
+            if (parseFloat(res.headers['content-length']) < limit && this.saveInBrowserSupported() && assetUrl !== "game") {
+                this.storage.rom.put(assetUrl.split("/").pop(), {
+                    "content-length": res.headers['content-length'],
+                    data: res.data,
+                    type: type
+                })
+            }
+        });
     }
     downloadGamePatch() {
-        return new Promise((resolve, reject) => {
-            if ((typeof this.config.gamePatchUrl !== "string" || !this.config.gamePatchUrl.trim()) && !this.toData(this.config.gamePatchUrl, true)) {
-                resolve();
-                return;
-            }
-            this.textElem.innerText = this.localization("Download Game Patch");
-            const gotData = (data) => {
-                this.checkCompression(new Uint8Array(data), this.localization("Decompress Game Patch")).then((data) => {
-                    for (const k in data) {
-                        if (k === "!!notCompressedData") {
-                            FS.writeFile(this.config.gamePatchUrl.split('/').pop().split("#")[0].split("?")[0], data[k]);
-                            break;
-                        }
-                        if (k.endsWith('/')) continue;
-                        FS.writeFile("/" + k.split('/').pop(), data[k]);
-                    }
-                    resolve();
-                })
-            }
-            
-            this.downloadFile(this.config.gamePatchUrl, (res) => {
-                this.storage.rom.get(this.config.gamePatchUrl.split("/").pop()).then((result) => {
-                    if (result && result['content-length'] === res.headers['content-length'] && !this.debug) {
-                        gotData(result.data);
-                        return;
-                    }
-                    this.downloadFile(this.config.gamePatchUrl, (res) => {
-                        if (res === -1) {
-                            this.textElem.innerText = this.localization('Network Error');
-                            this.textElem.style.color = "red";
-                            return;
-                        }
-                        if (this.toData(this.config.gamePatchUrl, true)) {
-                            this.config.gamePatchUrl = "game";
-                        }
-                        gotData(res.data);
-                        const limit = (typeof this.config.cacheLimit === "number") ? this.config.cacheLimit : 1073741824;
-                        if (parseFloat(res.headers['content-length']) < limit && this.saveInBrowserSupported() && this.config.gamePatchUrl !== "game") {
-                            this.storage.rom.put(this.config.gamePatchUrl.split("/").pop(), {
-                                "content-length": res.headers['content-length'],
-                                data: res.data
-                            })
-                        }
-                    }, (progress) => {
-                        this.textElem.innerText = this.localization("Download Game Patch") + progress;
-                    }, true, {responseType: "arraybuffer", method: "GET"});
-                })
-            }, null, true, {method: "HEAD"})
-        })
+        return new Promise(async (resolve) => {
+            this.config.gamePatchUrl = await this.downloadGameFile(this.config.gamePatchUrl, "patch", this.localization("Download Game Patch"), this.localization("Decompress Game Patch"));
+            resolve();
+        });
     }
     downloadGameParent() {
-        return new Promise((resolve, reject) => {
-            if ((typeof this.config.gameParentUrl !== "string" || !this.config.gameParentUrl.trim()) && !this.toData(this.config.gameParentUrl, true)) {
-                resolve();
-                return;
-            }
-            this.textElem.innerText = this.localization("Download Game Parent");
-            const gotData = (data) => {
-                this.checkCompression(new Uint8Array(data), this.localization("Decompress Game Parent")).then((data) => {
-                    for (const k in data) {
-                        if (k === "!!notCompressedData") {
-                            FS.writeFile(this.config.gameParentUrl.split('/').pop().split("#")[0].split("?")[0], data[k]);
-                            break;
-                        }
-                        if (k.endsWith('/')) continue;
-                        FS.writeFile("/" + k.split('/').pop(), data[k]);
-                    }
-                    resolve();
-                })
-            }
-            
-            this.downloadFile(this.config.gameParentUrl, (res) => {
-                this.storage.rom.get(this.config.gameParentUrl.split("/").pop()).then((result) => {
-                    if (result && result['content-length'] === res.headers['content-length'] && !this.debug) {
-                        gotData(result.data);
-                        return;
-                    }
-                    this.downloadFile(this.config.gameParentUrl, (res) => {
-                        if (res === -1) {
-                            this.textElem.innerText = this.localization('Network Error');
-                            this.textElem.style.color = "red";
-                            return;
-                        }
-                        if (this.toData(this.config.gameParentUrl, true)) {
-                            this.config.gameParentUrl = "game";
-                        }
-                        gotData(res.data);
-                        const limit = (typeof this.config.cacheLimit === "number") ? this.config.cacheLimit : 1073741824;
-                        if (parseFloat(res.headers['content-length']) < limit && this.saveInBrowserSupported() && this.config.gameParentUrl !== "game") {
-                            this.storage.rom.put(this.config.gameParentUrl.split("/").pop(), {
-                                "content-length": res.headers['content-length'],
-                                data: res.data
-                            })
-                        }
-                    }, (progress) => {
-                        this.textElem.innerText = this.localization("Download Game Parent") + progress;
-                    }, true, {responseType: "arraybuffer", method: "GET"});
-                })
-            }, null, true, {method: "HEAD"})
-        })
+        return new Promise(async (resolve) => {
+            this.config.gameParentUrl = await this.downloadGameFile(this.config.gameParentUrl, "parent", this.localization("Download Game Parent"), this.localization("Decompress Game Parent"));
+            resolve();
+        });
     }
     downloadBios() {
-        return new Promise((resolve, reject) => {
-            if ((typeof this.config.biosUrl !== "string" || !this.config.biosUrl.trim()) && !this.toData(this.config.biosUrl, true)) {
-                resolve();
-                return;
-            }
-            this.textElem.innerText = this.localization("Download Game BIOS");
-            const gotBios = (data) => {
-                this.checkCompression(new Uint8Array(data), this.localization("Decompress Game BIOS")).then((data) => {
-                    for (const k in data) {
-                        if (k === "!!notCompressedData") {
-                            FS.writeFile(this.config.biosUrl.split('/').pop().split("#")[0].split("?")[0], data[k]);
-                            break;
-                        }
-                        if (k.endsWith('/')) continue;
-                        FS.writeFile("/" + k.split('/').pop(), data[k]);
-                    }
-                    resolve();
-                })
-            }
-            
-            this.downloadFile(this.config.biosUrl, (res) => {
-                if (res === -1) {
-                    this.textElem.innerText = this.localization('Network Error');
-                    this.textElem.style.color = "red";
-                    return;
-                }
-                this.storage.bios.get(this.config.biosUrl.split("/").pop()).then((result) => {
-                    if (result && result['content-length'] === res.headers['content-length'] && !this.debug) {
-                        gotBios(result.data);
-                        return;
-                    }
-                    this.downloadFile(this.config.biosUrl, (res) => {
-                        if (res === -1) {
-                            this.textElem.innerText = this.localization('Network Error');
-                            this.textElem.style.color = "red";
-                            return;
-                        }
-                        if (this.toData(this.config.biosUrl, true)) {
-                            this.config.biosUrl = "game";
-                        }
-                        gotBios(res.data);
-                        if (this.saveInBrowserSupported() && this.config.biosUrl !== "game") {
-                            this.storage.bios.put(this.config.biosUrl.split("/").pop(), {
-                                "content-length": res.headers['content-length'],
-                                data: res.data
-                            })
-                        }
-                    }, (progress) => {
-                        this.textElem.innerText = this.localization("Download Game BIOS") + progress;
-                    }, true, {responseType: "arraybuffer", method: "GET"});
-                })
-            }, null, true, {method: "HEAD"})
-        })
+        return new Promise(async (resolve) => {
+            this.config.biosUrl = await this.downloadGameFile(this.config.biosUrl, "bios", this.localization("Download Game BIOS"), this.localization("Decompress Game BIOS"));
+            resolve();
+        });
     }
     downloadRom() {
         const supportsExt = (ext) => {
             const core = this.getCore();
-            if (!this.extensions[core]) return false;
-            return this.extensions[core].includes(ext);
+            if (!this.extensions) return false;
+            return this.extensions.includes(ext);
         };
 
         return new Promise(resolve => {
@@ -938,7 +747,7 @@ class EmulatorJS {
             const gotGameData = (data) => {
                 if (['arcade', 'mame'].includes(this.getCore(true))) {
                     this.fileName = this.getBaseFileName(true);
-                    FS.writeFile(this.fileName, new Uint8Array(data));
+                    this.gameManager.FS.writeFile(this.fileName, new Uint8Array(data));
                     resolve();
                     return;
                 }
@@ -946,7 +755,7 @@ class EmulatorJS {
                 const altName = this.getBaseFileName(true);
 
                 let disableCue = false;
-                if (['pcsx_rearmed', 'genesis_plus_gx', 'picodrive', 'mednafen_pce', 'smsplus', 'vice_x64', 'vice_x64sc', 'vice_x128', 'vice_xvic', 'vice_xplus4', 'vice_xpet'].includes(this.getCore()) && this.config.disableCue === undefined) {
+                if (['pcsx_rearmed', 'genesis_plus_gx', 'picodrive', 'mednafen_pce', 'smsplus', 'vice_x64', 'vice_x64sc', 'vice_x128', 'vice_xvic', 'vice_xplus4', 'vice_xpet', 'puae'].includes(this.getCore()) && this.config.disableCue === undefined) {
                     disableCue = true;
                 } else {
                     disableCue = this.config.disableCue;
@@ -960,20 +769,20 @@ class EmulatorJS {
                         for (let i=0; i<paths.length-1; i++) {
                             if (paths[i] === "") continue;
                             cp += `/${paths[i]}`;
-                            if (!FS.analyzePath(cp).exists) {
-                                FS.mkdir(cp);
+                            if (!this.gameManager.FS.analyzePath(cp).exists) {
+                                this.gameManager.FS.mkdir(cp);
                             }
                         }
                     }
                     if (fileName.endsWith('/')) {
-                        FS.mkdir(fileName);
+                        this.gameManager.FS.mkdir(fileName);
                         return;
                     }
                     if (fileName === "!!notCompressedData") {
-                        FS.writeFile(altName, fileData);
+                        this.gameManager.FS.writeFile(altName, fileData);
                         fileNames.push(altName);
                     } else {
-                        FS.writeFile(`/${fileName}`, fileData);
+                        this.gameManager.FS.writeFile(`/${fileName}`, fileData);
                         fileNames.push(fileName);
                     }
                 }).then(() => {
@@ -1026,47 +835,49 @@ class EmulatorJS {
                     resolve();
                 });
             }
-            
-            this.downloadFile(this.config.gameUrl, (res) => {
+            const downloadFile = async () => {
+                const res = await this.downloadFile(this.config.gameUrl, (progress) => {
+                    this.textElem.innerText = this.localization("Download Game Data") + progress;
+                }, true, {responseType: "arraybuffer", method: "GET"});
                 if (res === -1) {
-                    this.textElem.innerText = this.localization('Network Error');
-                    this.textElem.style.color = "red";
+                    this.startGameError(this.localization('Network Error'));
                     return;
                 }
-                const name = (typeof this.config.gameUrl === "string") ? this.config.gameUrl.split('/').pop() : "game";
-                this.storage.rom.get(name).then((result) => {
-                    if (result && result['content-length'] === res.headers['content-length'] && !this.debug && name !== "game") {
+                if (this.config.gameUrl instanceof File) {
+                    this.config.gameUrl = this.config.gameUrl.name;
+                } else if (this.toData(this.config.gameUrl, true)) {
+                    this.config.gameUrl = "game";
+                }
+                gotGameData(res.data);
+                const limit = (typeof this.config.cacheLimit === "number") ? this.config.cacheLimit : 1073741824;
+                if (parseFloat(res.headers['content-length']) < limit && this.saveInBrowserSupported() && this.config.gameUrl !== "game") {
+                    this.storage.rom.put(this.config.gameUrl.split("/").pop(), {
+                        "content-length": res.headers['content-length'],
+                        data: res.data
+                    })
+                }
+            }
+            
+            if (!this.debug) {
+                this.downloadFile(this.config.gameUrl, null, true, {method: "HEAD"}).then(async (res) => {
+                    const name = (typeof this.config.gameUrl === "string") ? this.config.gameUrl.split('/').pop() : "game";
+                    const result = await this.storage.rom.get(name);
+                    if (result && result['content-length'] === res.headers['content-length'] && name !== "game") {
                         gotGameData(result.data);
                         return;
                     }
-                    this.downloadFile(this.config.gameUrl, (res) => {
-                        if (res === -1) {
-                            this.textElem.innerText = this.localization('Network Error');
-                            this.textElem.style.color = "red";
-                            return;
-                        }
-                        if (this.toData(this.config.gameUrl, true)) {
-                            this.config.gameUrl = "game";
-                        }
-                        gotGameData(res.data);
-                        const limit = (typeof this.config.cacheLimit === "number") ? this.config.cacheLimit : 1073741824;
-                        if (parseFloat(res.headers['content-length']) < limit && this.saveInBrowserSupported() && this.config.gameUrl !== "game") {
-                            this.storage.rom.put(this.config.gameUrl.split("/").pop(), {
-                                "content-length": res.headers['content-length'],
-                                data: res.data
-                            })
-                        }
-                    }, (progress) => {
-                        this.textElem.innerText = this.localization("Download Game Data") + progress;
-                    }, true, {responseType: "arraybuffer", method: "GET"});
+                    downloadFile();
                 })
-            }, null, true, {method: "HEAD"})
+            } else {
+                downloadFile();
+            }
         })
     }
     downloadFiles() {
         (async () => {
             this.gameManager = new window.EJS_GameManager(this.Module, this);
             await this.gameManager.loadExternalFiles();
+            await this.gameManager.mountFileSystems();
             if (this.getCore() === "ppsspp") {
                 await this.gameManager.loadPpssppAssets();
             }
@@ -1079,26 +890,31 @@ class EmulatorJS {
         })();
     }
     initModule(wasmData, threadData) {
-        window.Module = {
-            'noInitialRun': true,
-            'onRuntimeInitialized': this.downloadFiles.bind(this),
-            'arguments': [],
-            'preRun': [],
-            'postRun': [],
-            'canvas': this.canvas,
-            'print': (msg) => {
+        if (typeof window.EJS_Runtime !== "function") {
+            console.warn("EJS_Runtime is not defined!");
+            this.startGameError(this.localization("Failed to start game"));
+            throw new Error("EJS_Runtime is not defined!");
+        }
+        window.EJS_Runtime({
+            noInitialRun: true,
+            onRuntimeInitialized: null,
+            arguments: [],
+            preRun: [],
+            postRun: [],
+            canvas: this.canvas,
+            print: (msg) => {
                 if (this.debug) {
                     console.log(msg);
                 }
             },
-            'printErr': (msg) => {
+            printErr: (msg) => {
                 if (this.debug) {
                     console.log(msg);
                 }
             },
-            'totalDependencies': 0,
-            'monitorRunDependencies': () => {},
-            'locateFile': function(fileName) {
+            totalDependencies: 0,
+            monitorRunDependencies: () => {},
+            locateFile: function(fileName) {
                 if (this.debug) console.log(fileName);
                 if (fileName.endsWith(".wasm")) {
                     return URL.createObjectURL(new Blob([wasmData], {type: "application/wasm"}));
@@ -1106,8 +922,13 @@ class EmulatorJS {
                     return URL.createObjectURL(new Blob([threadData], {type: "application/javascript"}));
                 }
             }
-        };
-        this.Module = window.Module;
+        }).then(module => {
+            this.Module = module;
+            this.downloadFiles();
+        }).catch(e => {
+            console.warn(e);
+            this.startGameError(this.localization("Failed to start game"));
+        });
     }
     startGame() {
         try {
@@ -1123,12 +944,17 @@ class EmulatorJS {
             }
             this.Module.resumeMainLoop();
             this.checkSupportedOpts();
+            this.setupDisksMenu();
+            // hide the disks menu if the disk count is not greater than 1
+            if (!(this.gameManager.getDiskCount() > 1)) {
+                this.diskParent.style.display = 'none';
+            }
             this.setupSettingsMenu();
             this.loadSettings();
             this.updateCheatUI();
             this.updateGamepadLabels();
             if (!this.muted) this.setVolume(this.volume);
-            this.elements.parent.focus();
+            if (this.config.noAutoFocus !== true) this.elements.parent.focus();
             this.textElem.remove();
             this.textElem = null;
             this.game.classList.remove("ejs_game");
@@ -1153,9 +979,9 @@ class EmulatorJS {
                 this.checkStarted();
             }
         } catch(e) {
-            console.warn("failed to start game", e);
-            this.textElem.innerText = this.localization("Failed to start game");
-            this.textElem.style.color = "red";
+            console.warn("Failed to start game", e);
+            this.startGameError(this.localization("Failed to start game"));
+            this.callEvent("exit");
             return;
         }
         this.callEvent("start");
@@ -1166,15 +992,15 @@ class EmulatorJS {
             let state = "suspended";
             let popup;
             while (state === "suspended") {
-                if (!window.AL) return;
-                window.AL.currentCtx.sources.forEach(ctx => {
+                if (!this.Module.AL) return;
+                this.Module.AL.currentCtx.sources.forEach(ctx => {
                     state = ctx.gain.context.state;
                 });
                 if (state !== "suspended") break;
                 if (!popup) {
                     popup = this.createPopup("", {});
                     const button = this.createElement("button");
-                    button.innerText = "Click to resume Emulator";
+                    button.innerText = this.localization("Click to resume Emulator");
                     button.classList.add("ejs_menu_button");
                     button.style.width = "25%";
                     button.style.height = "25%";
@@ -1196,14 +1022,14 @@ class EmulatorJS {
         this.setVirtualGamepad();
         this.addEventListener(this.elements.parent, "keydown keyup", this.keyChange.bind(this));
         this.addEventListener(this.elements.parent, "mousedown touchstart", (e) => {
-            if (document.activeElement !== this.elements.parent) this.elements.parent.focus();
+            if (document.activeElement !== this.elements.parent && this.config.noAutoFocus !== true) this.elements.parent.focus();
         })
         this.addEventListener(window, "resize", this.handleResize.bind(this));
         //this.addEventListener(window, "blur", e => console.log(e), true); //TODO - add "click to make keyboard keys work" message?
         
         let counter = 0;
         this.elements.statePopupPanel = this.createPopup("", {}, true);
-        this.elements.statePopupPanel.innerText = "Drop save state here to load";
+        this.elements.statePopupPanel.innerText = this.localization("Drop save state here to load");
         this.elements.statePopupPanel.style["text-align"] = "center";
         this.elements.statePopupPanel.style["font-size"] = "28px";
         
@@ -1211,8 +1037,12 @@ class EmulatorJS {
         this.addEventListener(window, "webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange", () => {
             setTimeout(() => {
                 this.handleResize.bind(this);
-                this.elements.parent.focus();
+                if (this.config.noAutoFocus !== true) this.elements.parent.focus();
             }, 0);
+        });
+        this.addEventListener(window, "beforeunload", (e) => {
+            if (!this.started) return;
+            this.callEvent("exit");
         });
         this.addEventListener(this.elements.parent, "dragenter", (e) => {
             e.preventDefault();
@@ -1237,6 +1067,7 @@ class EmulatorJS {
             counter = 0;
             this.elements.statePopupPanel.parentElement.style.display = "none";
         });
+
         this.addEventListener(this.elements.parent, "drop", (e) => {
             e.preventDefault();
             if (!this.started) return;
@@ -1287,6 +1118,19 @@ class EmulatorJS {
             } else {
                 this.gamepadLabels[i].innerText = "n/a";
             }
+        }
+    }
+    createLink(elem, link, text, useP) {
+        const elm = this.createElement("a");
+        elm.href = link;
+        elm.target = "_blank";
+        elm.innerText = this.localization(text);
+        if (useP) {
+            const p = this.createElement("p");
+            p.appendChild(elm);
+            elem.appendChild(p);
+        } else {
+            elem.appendChild(elm);
         }
     }
     createContextMenu() {
@@ -1418,25 +1262,38 @@ class EmulatorJS {
             license.style.display = "none";
             const retroarch = this.createElement("div");
             retroarch.style.display = "none";
+            const coreLicense = this.createElement("div");
+            coreLicense.style.display = "none";
             body.appendChild(home);
             body.appendChild(license);
             body.appendChild(retroarch);
+            body.appendChild(coreLicense);
             
             let current = home;
             home.innerText = "EmulatorJS v"+this.ejs_version;
             home.appendChild(this.createElement("br"));
             home.appendChild(this.createElement("br"));
-            const gh = this.createElement("a");
-            gh.href = "https://github.com/EmulatorJS/EmulatorJS";
-            gh.target = "_blank";
-            gh.innerText = this.localization("View on GitHub");
-            home.appendChild(gh);
-            home.appendChild(this.createElement("br"));
-            const dc = this.createElement("a");
-            dc.href = "https://discord.gg/6akryGkETU";
-            dc.target = "_blank";
-            dc.innerText = this.localization("Join the discord");
-            home.appendChild(dc);
+
+            this.createLink(home, "https://github.com/EmulatorJS/EmulatorJS", "View on GitHub", true);
+
+            this.createLink(home, "https://discord.gg/6akryGkETU", "Join the discord", true);
+
+            const info = this.createElement("div");
+
+            this.createLink(info, "https://emulatorjs.org", "EmulatorJS");
+            // I do not like using innerHTML, though this should be "safe"
+            info.innerHTML += " is powered by ";
+            this.createLink(info, "https://github.com/libretro/RetroArch/", "RetroArch");
+            if (this.repository && this.coreName) {
+                info.innerHTML += ". This core is powered by ";
+                this.createLink(info, this.repository, this.coreName);
+                info.innerHTML += ".";
+            } else {
+                info.innerHTML += ".";
+            }
+            home.appendChild(info);
+
+
             home.appendChild(this.createElement("br"));
             menu.appendChild(parent);
             body.appendChild(menu);
@@ -1457,9 +1314,17 @@ class EmulatorJS {
             addButton("RetroArch License", false, () => {
                 setElem(retroarch);
             })
-            //Todo - Core specific licenses, contributors.
+            if (this.coreName && this.license) {
+                addButton(this.coreName + " License", false, () => {
+                    setElem(coreLicense);
+                })
+                coreLicense.style['text-align'] = "center";
+                coreLicense.style['padding'] = "10px";
+                coreLicense.innerText = this.license;
+            }
+            //Todo - Contributors.
             
-            retroarch.innerText = "This project is powered by ";
+            retroarch.innerText = this.localization("This project is powered by") + " ";
             const a = this.createElement("a");
             a.href = "https://github.com/libretro/RetroArch";
             a.target = "_blank";
@@ -1468,7 +1333,7 @@ class EmulatorJS {
             const licenseLink = this.createElement("a");
             licenseLink.target = "_blank";
             licenseLink.href = "https://github.com/libretro/RetroArch/blob/master/COPYING";
-            licenseLink.innerText = "View the RetroArch license here.";
+            licenseLink.innerText = this.localization("View the RetroArch license here");
             a.appendChild(this.createElement("br"));
             a.appendChild(licenseLink);
             
@@ -1574,7 +1439,7 @@ class EmulatorJS {
         let timeout = null;
         let ignoreEvents = false;
         const hide = () => {
-            if (this.paused || this.settingsMenuOpen) return;
+            if (this.paused || this.settingsMenuOpen || this.disksMenuOpen) return;
             this.elements.menu.classList.add("ejs_menu_bar_hidden");
         }
         
@@ -1586,23 +1451,15 @@ class EmulatorJS {
             timeout = setTimeout(hide, 3000);
             this.elements.menu.classList.remove("ejs_menu_bar_hidden");
         })
-        this.addEventListener(this.elements.menu, 'touchstart touchend', (e) => {
-            if (!this.started) return;
-            if (this.isPopupOpen()) return;
-            clearTimeout(timeout);
-            timeout = setTimeout(hide, 3000);
-            this.elements.menu.classList.remove("ejs_menu_bar_hidden");
-        })
         this.menu = {
             close: () => {
-                if (!this.started) return;
                 clearTimeout(timeout);
                 this.elements.menu.classList.add("ejs_menu_bar_hidden");
             },
-            open: () => {
-                if (!this.started) return;
+            open: (force) => {
+                if (!this.started && force !== true) return;
                 clearTimeout(timeout);
-                timeout = setTimeout(hide, 3000);
+                if (force !== true) timeout = setTimeout(hide, 3000);
                 this.elements.menu.classList.remove("ejs_menu_bar_hidden");
             },
             toggle: () => {
@@ -1612,7 +1469,6 @@ class EmulatorJS {
                     timeout = setTimeout(hide, 3000);
                 }
                 this.elements.menu.classList.toggle("ejs_menu_bar_hidden");
-                
             }
         }
         this.elements.parent.appendChild(this.elements.menu);
@@ -1662,19 +1518,18 @@ class EmulatorJS {
         
         const restartButton = addButton("Restart", '<svg viewBox="0 0 512 512"><path d="M496 48V192c0 17.69-14.31 32-32 32H320c-17.69 0-32-14.31-32-32s14.31-32 32-32h63.39c-29.97-39.7-77.25-63.78-127.6-63.78C167.7 96.22 96 167.9 96 256s71.69 159.8 159.8 159.8c34.88 0 68.03-11.03 95.88-31.94c14.22-10.53 34.22-7.75 44.81 6.375c10.59 14.16 7.75 34.22-6.375 44.81c-39.03 29.28-85.36 44.86-134.2 44.86C132.5 479.9 32 379.4 32 256s100.5-223.9 223.9-223.9c69.15 0 134 32.47 176.1 86.12V48c0-17.69 14.31-32 32-32S496 30.31 496 48z"/></svg>', () => {
             if (this.isNetplay && this.netplay.owner) {
-                this.gameManager.saveSaveFiles();
                 this.gameManager.restart();
                 this.netplay.reset();
                 this.netplay.sendMessage({restart:true});
                 this.play();
             } else if (!this.isNetplay) {
-                this.gameManager.saveSaveFiles();
                 this.gameManager.restart();
             }
         });
         const pauseButton = addButton("Pause", '<svg viewBox="0 0 320 512"><path d="M272 63.1l-32 0c-26.51 0-48 21.49-48 47.1v288c0 26.51 21.49 48 48 48L272 448c26.51 0 48-21.49 48-48v-288C320 85.49 298.5 63.1 272 63.1zM80 63.1l-32 0c-26.51 0-48 21.49-48 48v288C0 426.5 21.49 448 48 448l32 0c26.51 0 48-21.49 48-48v-288C128 85.49 106.5 63.1 80 63.1z"/></svg>', () => {
             if (this.isNetplay && this.netplay.owner) {
                 this.pause();
+                this.gameManager.saveSaveFiles();
                 this.netplay.sendMessage({pause:true});
             } else if (!this.isNetplay) {
                 this.pause();
@@ -1703,7 +1558,7 @@ class EmulatorJS {
             this.gameManager.toggleMainLoop(this.paused ? 0 : 1);
             
             //I now realize its not easy to pause it while the cursor is locked, just in case I guess
-            if (this.getCore(true) === "nds") {
+            if (this.enableMouseLock) {
                 if (this.canvas.exitPointerLock) {
                     this.canvas.exitPointerLock();
                 } else if (this.canvas.mozExitPointerLock) {
@@ -1792,10 +1647,10 @@ class EmulatorJS {
             for (let i=0; i<paths.length-1; i++) {
                 if (paths[i] === "") continue;
                 cp += "/"+paths[i];
-                if (!FS.analyzePath(cp).exists) FS.mkdir(cp);
+                if (!this.gameManager.FS.analyzePath(cp).exists) this.gameManager.FS.mkdir(cp);
             }
-            if (FS.analyzePath(path).exists) FS.unlink(path);
-            FS.writeFile(path, sav);
+            if (this.gameManager.FS.analyzePath(path).exists) this.gameManager.FS.unlink(path);
+            this.gameManager.FS.writeFile(path, sav);
             this.gameManager.loadSaveFiles();
         });
         const netplay = addButton("Netplay", '<svg viewBox="0 0 512 512"><path fill="currentColor" d="M364.215 192h131.43c5.439 20.419 8.354 41.868 8.354 64s-2.915 43.581-8.354 64h-131.43c5.154-43.049 4.939-86.746 0-128zM185.214 352c10.678 53.68 33.173 112.514 70.125 151.992.221.001.44.008.661.008s.44-.008.661-.008c37.012-39.543 59.467-98.414 70.125-151.992H185.214zm174.13-192h125.385C452.802 84.024 384.128 27.305 300.95 12.075c30.238 43.12 48.821 96.332 58.394 147.925zm-27.35 32H180.006c-5.339 41.914-5.345 86.037 0 128h151.989c5.339-41.915 5.345-86.037-.001-128zM152.656 352H27.271c31.926 75.976 100.6 132.695 183.778 147.925-30.246-43.136-48.823-96.35-58.393-147.925zm206.688 0c-9.575 51.605-28.163 104.814-58.394 147.925 83.178-15.23 151.852-71.949 183.778-147.925H359.344zm-32.558-192c-10.678-53.68-33.174-112.514-70.125-151.992-.221 0-.44-.008-.661-.008s-.44.008-.661.008C218.327 47.551 195.872 106.422 185.214 160h141.572zM16.355 192C10.915 212.419 8 233.868 8 256s2.915 43.581 8.355 64h131.43c-4.939-41.254-5.154-84.951 0-128H16.355zm136.301-32c9.575-51.602 28.161-104.81 58.394-147.925C127.872 27.305 59.198 84.024 27.271 160h125.385z"/></svg>', async () => {
@@ -1843,8 +1698,8 @@ class EmulatorJS {
             volumeSlider.setAttribute("aria-valuenow", volume*100);
             volumeSlider.setAttribute("aria-valuetext", (volume*100).toFixed(1) + "%");
             volumeSlider.setAttribute("style", "--value: "+volume*100+"%;margin-left: 5px;position: relative;z-index: 2;");
-            if (window.AL && AL.currentCtx && AL.currentCtx.sources) {
-                AL.currentCtx.sources.forEach(e => {
+            if (this.Module.AL && this.Module.AL.currentCtx && this.Module.AL.currentCtx.sources) {
+                this.Module.AL.currentCtx.sources.forEach(e => {
                     e.gain.gain.value = volume;
                 })
             }
@@ -1870,15 +1725,40 @@ class EmulatorJS {
         this.elements.menu.appendChild(volumeSettings);
 
         const contextMenuButton = addButton("Context Menu", '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>', () => {
-            if (this.elements.contextmenu.style.display == "none") {
+            if (this.elements.contextmenu.style.display === "none") {
                 this.elements.contextmenu.style.display = "block";
                 this.elements.contextmenu.style.left = (getComputedStyle(this.elements.parent).width.split("px")[0]/2 - getComputedStyle(this.elements.contextmenu).width.split("px")[0]/2)+"px";
                 this.elements.contextmenu.style.top = (getComputedStyle(this.elements.parent).height.split("px")[0]/2 - getComputedStyle(this.elements.contextmenu).height.split("px")[0]/2)+"px";
+                setTimeout(this.menu.close.bind(this), 20);
             } else {
                 this.elements.contextmenu.style.display = "none";
             }
         });
         
+        this.diskParent = this.createElement("div");
+        this.diskParent.id = "ejs_disksMenu";
+        this.disksMenuOpen = false;
+        const diskButton = addButton("Disks", '<svg fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 473.109 473.109"><path d="M340.963,101.878H12.105C5.423,101.878,0,107.301,0,113.983v328.862c0,6.68,5.423,12.105,12.105,12.105h328.857 c6.685,0,12.104-5.426,12.104-12.105V113.983C353.067,107.301,347.647,101.878,340.963,101.878z M67.584,120.042h217.895v101.884 H67.584V120.042z M296.076,429.228H56.998V278.414h239.079V429.228z M223.947,135.173h30.269v72.638h-30.269V135.173z M274.13,315.741H78.933v-12.105H274.13V315.741z M274.13,358.109H78.933v-12.105H274.13V358.109z M274.13,398.965H78.933v-12.105 H274.13V398.965z M473.109,30.263v328.863c0,6.68-5.426,12.105-12.105,12.105H384.59v-25.724h31.528V194.694H384.59v-56.489h20.93 V36.321H187.625v43.361h-67.583v-49.42c0-6.682,5.423-12.105,12.105-12.105H461.01C467.695,18.158,473.109,23.581,473.109,30.263z M343.989,51.453h30.269v31.321c-3.18-1.918-6.868-3.092-10.853-3.092h-19.416V51.453z M394.177,232.021h-9.581v-12.105h9.581 V232.021z M384.59,262.284h9.581v12.105h-9.581V262.284z M384.59,303.14h9.581v12.104h-9.581V303.14z"/></svg>', () => {
+            this.disksMenuOpen = !this.disksMenuOpen;
+            diskButton[1].classList.toggle("ejs_svg_rotate", this.disksMenuOpen);
+            this.disksMenu.style.display = this.disksMenuOpen ? "" : "none";
+            diskButton[2].classList.toggle("ejs_disks_text", this.disksMenuOpen);
+        }, this.diskParent, true);
+        this.elements.menu.appendChild(this.diskParent);
+        this.closeDisksMenu = () => {
+            if (!this.disksMenu) return;
+            this.disksMenuOpen = false;
+            diskButton[1].classList.toggle("ejs_svg_rotate", this.disksMenuOpen);
+            diskButton[2].classList.toggle("ejs_disks_text", this.disksMenuOpen);
+            this.disksMenu.style.display = "none";
+        }
+        this.addEventListener(this.elements.parent, "mousedown touchstart", (e) => {
+            if (this.isChild(this.disksMenu, e.target)) return;
+            if (e.pointerType === "touch") return;
+            if (e.target === diskButton[0] || e.target === diskButton[2]) return;
+            this.closeDisksMenu();
+        })
+
         this.settingParent = this.createElement("div");
         this.settingsMenuOpen = false;
         const settingButton = addButton("Settings", '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M495.9 166.6C499.2 175.2 496.4 184.9 489.6 191.2L446.3 230.6C447.4 238.9 448 247.4 448 256C448 264.6 447.4 273.1 446.3 281.4L489.6 320.8C496.4 327.1 499.2 336.8 495.9 345.4C491.5 357.3 486.2 368.8 480.2 379.7L475.5 387.8C468.9 398.8 461.5 409.2 453.4 419.1C447.4 426.2 437.7 428.7 428.9 425.9L373.2 408.1C359.8 418.4 344.1 427 329.2 433.6L316.7 490.7C314.7 499.7 307.7 506.1 298.5 508.5C284.7 510.8 270.5 512 255.1 512C241.5 512 227.3 510.8 213.5 508.5C204.3 506.1 197.3 499.7 195.3 490.7L182.8 433.6C167 427 152.2 418.4 138.8 408.1L83.14 425.9C74.3 428.7 64.55 426.2 58.63 419.1C50.52 409.2 43.12 398.8 36.52 387.8L31.84 379.7C25.77 368.8 20.49 357.3 16.06 345.4C12.82 336.8 15.55 327.1 22.41 320.8L65.67 281.4C64.57 273.1 64 264.6 64 256C64 247.4 64.57 238.9 65.67 230.6L22.41 191.2C15.55 184.9 12.82 175.3 16.06 166.6C20.49 154.7 25.78 143.2 31.84 132.3L36.51 124.2C43.12 113.2 50.52 102.8 58.63 92.95C64.55 85.8 74.3 83.32 83.14 86.14L138.8 103.9C152.2 93.56 167 84.96 182.8 78.43L195.3 21.33C197.3 12.25 204.3 5.04 213.5 3.51C227.3 1.201 241.5 0 256 0C270.5 0 284.7 1.201 298.5 3.51C307.7 5.04 314.7 12.25 316.7 21.33L329.2 78.43C344.1 84.96 359.8 93.56 373.2 103.9L428.9 86.14C437.7 83.32 447.4 85.8 453.4 92.95C461.5 102.8 468.9 113.2 475.5 124.2L480.2 132.3C486.2 143.2 491.5 154.7 495.9 166.6V166.6zM256 336C300.2 336 336 300.2 336 255.1C336 211.8 300.2 175.1 256 175.1C211.8 175.1 176 211.8 176 255.1C176 300.2 211.8 336 256 336z"/></svg>', () => {
@@ -1901,9 +1781,10 @@ class EmulatorJS {
             if (e.target === settingButton[0] || e.target === settingButton[2]) return;
             this.closeSettingsMenu();
         })
+
         this.addEventListener(this.canvas, "click", (e) => {
             if (e.pointerType === "touch") return;
-            if (this.getCore(true) === "nds" && !this.paused) {
+            if (this.enableMouseLock && !this.paused) {
                 if (this.canvas.requestPointerLock) {
                     this.canvas.requestPointerLock();
                 } else if (this.canvas.mozRequestPointerLock) {
@@ -1936,7 +1817,7 @@ class EmulatorJS {
                 enter.style.display = "none";
                 if (this.isMobile) {
                     try {
-                        screen.orientation.lock(this.getCore(true) === "nds" ? "portrait" : "landscape").catch(e => {});;
+                        screen.orientation.lock(this.getCore(true) === "nds" ? "portrait" : "landscape").catch(e => {});
                     } catch(e) {}
                 }
             } else {
@@ -1958,6 +1839,61 @@ class EmulatorJS {
                 }
             }
         }
+
+        let exitMenuIsOpen = false;
+        const exitEmulation = addButton("Exit EmulatorJS", '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 460"><path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(255,255,255);stroke-opacity:1;stroke-miterlimit:4;" d="M 14.000061 7.636414 L 14.000061 4.5 C 14.000061 4.223877 13.776123 3.999939 13.5 3.999939 L 4.5 3.999939 C 4.223877 3.999939 3.999939 4.223877 3.999939 4.5 L 3.999939 19.5 C 3.999939 19.776123 4.223877 20.000061 4.5 20.000061 L 13.5 20.000061 C 13.776123 20.000061 14.000061 19.776123 14.000061 19.5 L 14.000061 16.363586 " transform="matrix(21.333333,0,0,21.333333,0,0)"/><path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(255,255,255);stroke-opacity:1;stroke-miterlimit:4;" d="M 9.999939 12 L 21 12 M 21 12 L 18.000366 8.499939 M 21 12 L 18 15.500061 " transform="matrix(21.333333,0,0,21.333333,0,0)"/></svg>', async () => {
+            if (exitMenuIsOpen) return;
+            exitMenuIsOpen = true;
+            const popups = this.createSubPopup();
+            this.game.appendChild(popups[0]);
+            popups[1].classList.add("ejs_cheat_parent");
+            popups[1].style.width = "100%";
+            const popup = popups[1];
+            const header = this.createElement("div");
+            header.classList.add("ejs_cheat_header");
+            const title = this.createElement("h2");
+            title.innerText = this.localization("Are you sure you want to exit?");
+            title.classList.add("ejs_cheat_heading");
+            const close = this.createElement("button");
+            close.classList.add("ejs_cheat_close");
+            header.appendChild(title);
+            header.appendChild(close);
+            popup.appendChild(header);
+            this.addEventListener(close, "click", (e) => {
+                exitMenuIsOpen = false
+                popups[0].remove();
+            })
+            popup.appendChild(this.createElement("br"));
+
+            const footer = this.createElement("footer");
+            const submit = this.createElement("button");
+            const closeButton = this.createElement("button");
+            submit.innerText = this.localization("Exit");
+            closeButton.innerText = this.localization("Cancel");
+            submit.classList.add("ejs_button_button");
+            closeButton.classList.add("ejs_button_button");
+            submit.classList.add("ejs_popup_submit");
+            closeButton.classList.add("ejs_popup_submit");
+            submit.style["background-color"] = "rgba(var(--ejs-primary-color),1)";
+            footer.appendChild(submit);
+            const span = this.createElement("span");
+            span.innerText = " ";
+            footer.appendChild(span);
+            footer.appendChild(closeButton);
+            popup.appendChild(footer);
+
+            this.addEventListener(closeButton, "click", (e) => {
+                popups[0].remove();
+                exitMenuIsOpen = false
+            })
+
+            this.addEventListener(submit, "click", (e) => {
+                popups[0].remove();
+                const body = this.createPopup("EmulatorJS has exited", {});
+                this.callEvent("exit");
+            })
+            setTimeout(this.menu.close.bind(this), 20);
+        });
         
         
         this.addEventListener(document, "webkitfullscreenchange mozfullscreenchange fullscreenchange", (e) => {
@@ -1992,7 +1928,8 @@ class EmulatorJS {
             cacheManager: [cache],
             saveSavFiles: [saveSavFiles],
             loadSavFiles: [loadSavFiles],
-            netplay: [netplay]
+            netplay: [netplay],
+            exit: [exitEmulation]
         }
         
         
@@ -2013,14 +1950,48 @@ class EmulatorJS {
                 muteButton.style.display = "none";
                 unmuteButton.style.display = "none";
             }
-            if (this.config.buttonOpts.saveState === false) saveState.style.display = "none"
-            if (this.config.buttonOpts.loadState === false) loadState.style.display = "none"
-            if (this.config.buttonOpts.saveSavFiles === false) saveSavFiles.style.display = "none"
-            if (this.config.buttonOpts.loadSavFiles === false) loadSavFiles.style.display = "none"
-            if (this.config.buttonOpts.gamepad === false) controlMenu.style.display = "none"
-            if (this.config.buttonOpts.cheat === false) cheatMenu.style.display = "none"
-            if (this.config.buttonOpts.cacheManager === false) cache.style.display = "none"
-            if (this.config.buttonOpts.netplay === false) netplay.style.display = "none"
+            if (this.config.buttonOpts.saveState === false) saveState.style.display = "none";
+            if (this.config.buttonOpts.loadState === false) loadState.style.display = "none";
+            if (this.config.buttonOpts.saveSavFiles === false) saveSavFiles.style.display = "none";
+            if (this.config.buttonOpts.loadSavFiles === false) loadSavFiles.style.display = "none";
+            if (this.config.buttonOpts.gamepad === false) controlMenu.style.display = "none";
+            if (this.config.buttonOpts.cheat === false) cheatMenu.style.display = "none";
+            if (this.config.buttonOpts.cacheManager === false) cache.style.display = "none";
+            if (this.config.buttonOpts.netplay === false) netplay.style.display = "none";
+            if (this.config.buttonOpts.diskButton === false) diskButton[0].style.display = "none";
+            if (this.config.buttonOpts.volumeSlider === false) volumeSlider.style.display = "none";
+            if (this.config.buttonOpts.exitEmulation === false) exitEmulation.style.display = "none";
+        }
+
+        this.menu.failedToStart = () => {
+            if (!this.config.buttonOpts) this.config.buttonOpts = {};
+            this.config.buttonOpts.mute = false;
+
+            settingButton[0].style.display = "";
+
+            // Hide all except settings button.
+            pauseButton.style.display = "none";
+            playButton.style.display = "none";
+            contextMenuButton.style.display = "none";
+            restartButton.style.display = "none";
+            enter.style.display = "none";
+            exit.style.display = "none";
+            muteButton.style.display = "none";
+            unmuteButton.style.display = "none";
+            saveState.style.display = "none";
+            loadState.style.display = "none";
+            saveSavFiles.style.display = "none";
+            loadSavFiles.style.display = "none";
+            controlMenu.style.display = "none";
+            cheatMenu.style.display = "none";
+            cache.style.display = "none";
+            netplay.style.display = "none";
+            diskButton[0].style.display = "none";
+            volumeSlider.style.display = "none";
+            exitEmulation.style.display = "none";
+
+            this.elements.menu.style.opacity = "";
+            this.menu.open(true);
         }
     }
     openCacheMenu() {
@@ -2406,6 +2377,25 @@ class EmulatorJS {
                 {id: 6, label: this.localization('LEFT')},
                 {id: 7, label: this.localization('RIGHT')},
             ];
+        } else if ('psp' === this.getControlScheme()) {
+            buttons = [
+                {id: 9, label: this.localization('\u25B3')}, // △
+                {id: 1, label: this.localization('\u25A1')}, // □
+                {id: 0, label: this.localization('\uFF58')}, // ｘ
+                {id: 8, label: this.localization('\u25CB')}, // ○
+                {id: 2, label: this.localization('SELECT')},
+                {id: 3, label: this.localization('START')},
+                {id: 4, label: this.localization('UP')},
+                {id: 5, label: this.localization('DOWN')},
+                {id: 6, label: this.localization('LEFT')},
+                {id: 7, label: this.localization('RIGHT')},
+                {id: 10, label: this.localization('L')},
+                {id: 11, label: this.localization('R')},
+                {id: 19, label: this.localization('STICK UP')},
+                {id: 18, label: this.localization('STICK DOWN')},
+                {id: 17, label: this.localization('STICK LEFT')},
+                {id: 16, label: this.localization('STICK RIGHT')},
+            ];
         } else {
             buttons = [
                 {id: 0, label: this.localization('B')},
@@ -2727,224 +2717,225 @@ class EmulatorJS {
         this.controlMenu.appendChild(popup);
         
     }
-    defaultControllers = {
-        0: {
+    initControlVars() {
+        this.defaultControllers = {
             0: {
-                'value': 'x',
-                'value2': 'BUTTON_2'
+                0: {
+                    'value': 'x',
+                    'value2': 'BUTTON_2'
+                },
+                1: {
+                    'value': 's',
+                    'value2': 'BUTTON_4'
+                },
+                2: {
+                    'value': 'v',
+                    'value2': 'SELECT'
+                },
+                3: {
+                    'value': 'enter',
+                    'value2': 'START'
+                },
+                4: {
+                    'value': 'up arrow',
+                    'value2': 'DPAD_UP'
+                },
+                5: {
+                    'value': 'down arrow',
+                    'value2': 'DPAD_DOWN'
+                },
+                6: {
+                    'value': 'left arrow',
+                    'value2': 'DPAD_LEFT'
+                },
+                7: {
+                    'value': 'right arrow',
+                    'value2': 'DPAD_RIGHT'
+                },
+                8: {
+                    'value': 'z',
+                    'value2': 'BUTTON_1'
+                },
+                9: {
+                    'value': 'a',
+                    'value2': 'BUTTON_3'
+                },
+                10: {
+                    'value': 'q',
+                    'value2': 'LEFT_TOP_SHOULDER'
+                },
+                11: {
+                    'value': 'e',
+                    'value2': 'RIGHT_TOP_SHOULDER'
+                },
+                12: {
+                    'value': 'tab',
+                    'value2': 'LEFT_BOTTOM_SHOULDER'
+                },
+                13: {
+                    'value': 'r',
+                    'value2': 'RIGHT_BOTTOM_SHOULDER'
+                },
+                14: {
+                    'value': '',
+                    'value2': 'LEFT_STICK',
+                },
+                15: {
+                    'value': '',
+                    'value2': 'RIGHT_STICK',
+                },
+                16: {
+                    'value': 'h',
+                    'value2': 'LEFT_STICK_X:+1'
+                },
+                17: {
+                    'value': 'f',
+                    'value2': 'LEFT_STICK_X:-1'
+                },
+                18: {
+                    'value': 'g',
+                    'value2': 'LEFT_STICK_Y:+1'
+                },
+                19: {
+                    'value': 't',
+                    'value2': 'LEFT_STICK_Y:-1'
+                },
+                20: {
+                    'value': 'l',
+                    'value2': 'RIGHT_STICK_X:+1'
+                },
+                21: {
+                    'value': 'j',
+                    'value2': 'RIGHT_STICK_X:-1'
+                },
+                22: {
+                    'value': 'k',
+                    'value2': 'RIGHT_STICK_Y:+1'
+                },
+                23: {
+                    'value': 'i',
+                    'value2': 'RIGHT_STICK_Y:-1'
+                },
+                24: {
+                    'value': '1'
+                },
+                25: {
+                    'value': '2'
+                },
+                26: {
+                    'value': '3'
+                },
+                27: {},
+                28: {},
+                29: {},
             },
-            1: {
-                'value': 's',
-                'value2': 'BUTTON_4'
-            },
-            2: {
-                'value': 'v',
-                'value2': 'SELECT'
-            },
-            3: {
-                'value': 'enter',
-                'value2': 'START'
-            },
-            4: {
-                'value': 'up arrow',
-                'value2': 'DPAD_UP'
-            },
-            5: {
-                'value': 'down arrow',
-                'value2': 'DPAD_DOWN'
-            },
-            6: {
-                'value': 'left arrow',
-                'value2': 'DPAD_LEFT'
-            },
-            7: {
-                'value': 'right arrow',
-                'value2': 'DPAD_RIGHT'
-            },
-            8: {
-                'value': 'z',
-                'value2': 'BUTTON_1'
-            },
-            9: {
-                'value': 'a',
-                'value2': 'BUTTON_3'
-            },
-            10: {
-                'value': 'q',
-                'value2': 'LEFT_TOP_SHOULDER'
-            },
-            11: {
-                'value': 'e',
-                'value2': 'RIGHT_TOP_SHOULDER'
-            },
-            12: {
-                'value': 'tab',
-                'value2': 'LEFT_BOTTOM_SHOULDER'
-            },
-            13: {
-                'value': 'r',
-                'value2': 'RIGHT_BOTTOM_SHOULDER'
-            },
-            14: {
-                'value': '',
-                'value2': 'LEFT_STICK',
-            },
-            15: {
-                'value': '',
-                'value2': 'RIGHT_STICK',
-            },
-            16: {
-                'value': 'h',
-                'value2': 'LEFT_STICK_X:+1'
-            },
-            17: {
-                'value': 'f',
-                'value2': 'LEFT_STICK_X:-1'
-            },
-            18: {
-                'value': 'g',
-                'value2': 'LEFT_STICK_Y:+1'
-            },
-            19: {
-                'value': 't',
-                'value2': 'LEFT_STICK_Y:-1'
-            },
-            20: {
-                'value': 'l',
-                'value2': 'RIGHT_STICK_X:+1'
-            },
-            21: {
-                'value': 'j',
-                'value2': 'RIGHT_STICK_X:-1'
-            },
-            22: {
-                'value': 'k',
-                'value2': 'RIGHT_STICK_Y:+1'
-            },
-            23: {
-                'value': 'i',
-                'value2': 'RIGHT_STICK_Y:-1'
-            },
-            24: {
-                'value': '1'
-            },
-            25: {
-                'value': '2'
-            },
-            26: {
-                'value': '3'
-            },
-            27: {},
-            28: {},
-            29: {},
-        },
-        1: {},
-        2: {},
-        3: {}
+            1: {},
+            2: {},
+            3: {}
+        }
+        this.keyMap = {
+            0: '',
+            8: 'backspace',
+            9: 'tab',
+            13: 'enter',
+            16: 'shift',
+            17: 'ctrl',
+            18: 'alt',
+            19: 'pause/break',
+            20: 'caps lock',
+            27: 'escape',
+            32: 'space',
+            33: 'page up',
+            34: 'page down',
+            35: 'end',
+            36: 'home',
+            37: 'left arrow',
+            38: 'up arrow',
+            39: 'right arrow',
+            40: 'down arrow',
+            45: 'insert',
+            46: 'delete',
+            48: '0',
+            49: '1',
+            50: '2',
+            51: '3',
+            52: '4',
+            53: '5',
+            54: '6',
+            55: '7',
+            56: '8',
+            57: '9',
+            65: 'a',
+            66: 'b',
+            67: 'c',
+            68: 'd',
+            69: 'e',
+            70: 'f',
+            71: 'g',
+            72: 'h',
+            73: 'i',
+            74: 'j',
+            75: 'k',
+            76: 'l',
+            77: 'm',
+            78: 'n',
+            79: 'o',
+            80: 'p',
+            81: 'q',
+            82: 'r',
+            83: 's',
+            84: 't',
+            85: 'u',
+            86: 'v',
+            87: 'w',
+            88: 'x',
+            89: 'y',
+            90: 'z',
+            91: 'left window key',
+            92: 'right window key',
+            93: 'select key',
+            96: 'numpad 0',
+            97: 'numpad 1',
+            98: 'numpad 2',
+            99: 'numpad 3',
+            100: 'numpad 4',
+            101: 'numpad 5',
+            102: 'numpad 6',
+            103: 'numpad 7',
+            104: 'numpad 8',
+            105: 'numpad 9',
+            106: 'multiply',
+            107: 'add',
+            109: 'subtract',
+            110: 'decimal point',
+            111: 'divide',
+            112: 'f1',
+            113: 'f2',
+            114: 'f3',
+            115: 'f4',
+            116: 'f5',
+            117: 'f6',
+            118: 'f7',
+            119: 'f8',
+            120: 'f9',
+            121: 'f10',
+            122: 'f11',
+            123: 'f12',
+            144: 'num lock',
+            145: 'scroll lock',
+            186: 'semi-colon',
+            187: 'equal sign',
+            188: 'comma',
+            189: 'dash',
+            190: 'period',
+            191: 'forward slash',
+            192: 'grave accent',
+            219: 'open bracket',
+            220: 'back slash',
+            221: 'close braket',
+            222: 'single quote'
+        }
     }
-    keyMap = {
-        0: '',
-        8: 'backspace',
-        9: 'tab',
-        13: 'enter',
-        16: 'shift',
-        17: 'ctrl',
-        18: 'alt',
-        19: 'pause/break',
-        20: 'caps lock',
-        27: 'escape',
-        32: 'space',
-        33: 'page up',
-        34: 'page down',
-        35: 'end',
-        36: 'home',
-        37: 'left arrow',
-        38: 'up arrow',
-        39: 'right arrow',
-        40: 'down arrow',
-        45: 'insert',
-        46: 'delete',
-        48: '0',
-        49: '1',
-        50: '2',
-        51: '3',
-        52: '4',
-        53: '5',
-        54: '6',
-        55: '7',
-        56: '8',
-        57: '9',
-        65: 'a',
-        66: 'b',
-        67: 'c',
-        68: 'd',
-        69: 'e',
-        70: 'f',
-        71: 'g',
-        72: 'h',
-        73: 'i',
-        74: 'j',
-        75: 'k',
-        76: 'l',
-        77: 'm',
-        78: 'n',
-        79: 'o',
-        80: 'p',
-        81: 'q',
-        82: 'r',
-        83: 's',
-        84: 't',
-        85: 'u',
-        86: 'v',
-        87: 'w',
-        88: 'x',
-        89: 'y',
-        90: 'z',
-        91: 'left window key',
-        92: 'right window key',
-        93: 'select key',
-        96: 'numpad 0',
-        97: 'numpad 1',
-        98: 'numpad 2',
-        99: 'numpad 3',
-        100: 'numpad 4',
-        101: 'numpad 5',
-        102: 'numpad 6',
-        103: 'numpad 7',
-        104: 'numpad 8',
-        105: 'numpad 9',
-        106: 'multiply',
-        107: 'add',
-        109: 'subtract',
-        110: 'decimal point',
-        111: 'divide',
-        112: 'f1',
-        113: 'f2',
-        114: 'f3',
-        115: 'f4',
-        116: 'f5',
-        117: 'f6',
-        118: 'f7',
-        119: 'f8',
-        120: 'f9',
-        121: 'f10',
-        122: 'f11',
-        123: 'f12',
-        144: 'num lock',
-        145: 'scroll lock',
-        186: 'semi-colon',
-        187: 'equal sign',
-        188: 'comma',
-        189: 'dash',
-        190: 'period',
-        191: 'forward slash',
-        192: 'grave accent',
-        219: 'open bracket',
-        220: 'back slash',
-        221: 'close braket',
-        222: 'single quote'
-    }
-    controls;
     setupKeys() {
         for (let i=0; i<4; i++) {
             for (let j=0; j<30; j++) {
@@ -3399,7 +3390,7 @@ class EmulatorJS {
         
         const leftHandedMode = false;
         const blockCSS = 'height:31px;text-align:center;border:1px solid #ccc;border-radius:5px;line-height:31px;';
-        const controlSchemeCls = `cs_${this.getControlScheme()}`.replaceAll(/\s/g, '_');
+        const controlSchemeCls = `cs_${this.getControlScheme()}`.split(/\s/g).join('_');
         
         for (let i=0; i<info.length; i++) {
             if (info[i].type !== 'button') continue;
@@ -3769,6 +3760,7 @@ class EmulatorJS {
     }
     saveSettings() {
         if (!window.localStorage || this.config.disableLocalStorage || !this.settingsLoaded) return;
+        if (!this.started && !this.failedToStart) return;
         const coreSpecific = {
             controlSettings: this.controls,
             settings: this.settings,
@@ -3779,32 +3771,41 @@ class EmulatorJS {
             muted: this.muted
         }
         localStorage.setItem("ejs-settings", JSON.stringify(ejs_settings));
-        localStorage.setItem("ejs-"+this.getCore()+"-settings", JSON.stringify(coreSpecific));
+        localStorage.setItem(this.getLocalStorageKey(), JSON.stringify(coreSpecific));
     }
-    loadRewindEnabled() {
-        if (!window.localStorage || this.config.disableLocalStorage) {
-            if (this.config.defaultOptions && this.config.defaultOptions.rewindEnabled) {
-                return this.config.defaultOptions.rewindEnabled === 'enabled';
+    getLocalStorageKey() {
+        let identifier = (this.config.gameId || 1) + "-" + this.getCore(true);
+        if (typeof this.config.gameUrl === "string" && !this.config.gameUrl.toLowerCase().startsWith("blob:")) {
+            identifier += "-" + this.config.gameUrl;
+        } else if (this.config.gameUrl instanceof File) {
+            identifier += "-" + this.config.gameUrl.name;
+        } else if (typeof this.config.gameId !== "number") {
+            console.warn("gameId (EJS_gameID) is not set. This may result in settings persisting across games.");
+        }
+        return "ejs-"+identifier+"-settings";
+    }
+    preGetSetting(setting) {
+        if (window.localStorage && !this.config.disableLocalStorage) {
+            let coreSpecific = localStorage.getItem(this.getLocalStorageKey());
+            try {
+                coreSpecific = JSON.parse(coreSpecific);
+                if (coreSpecific && coreSpecific.settings) {
+                    return coreSpecific.settings[setting];
+                }
+            } catch (e) {
+                console.warn("Could not load previous settings", e);
             }
-            return false;
         }
-        let coreSpecific = localStorage.getItem("ejs-"+this.getCore()+"-settings");
-        try {
-           coreSpecific = JSON.parse(coreSpecific);
-           if (!coreSpecific || !coreSpecific.settings) {
-               return false;
-           }
-           return coreSpecific.settings.rewindEnabled === 'enabled';
-        } catch (e) {
-            console.warn("Could not load previous settings", e);
-            return false;
+        if (this.config.defaultOptions && this.config.defaultOptions[setting]) {
+            return this.config.defaultOptions[setting];
         }
+        return null;
     }
     loadSettings() {
         if (!window.localStorage || this.config.disableLocalStorage) return;
         this.settingsLoaded = true;
         let ejs_settings = localStorage.getItem("ejs-settings");
-        let coreSpecific = localStorage.getItem("ejs-"+this.getCore()+"-settings");
+        let coreSpecific = localStorage.getItem(this.getLocalStorageKey());
         if (coreSpecific) {
             try {
                 coreSpecific = JSON.parse(coreSpecific);
@@ -3844,23 +3845,11 @@ class EmulatorJS {
             }
         }
     }
-    menuOptionChanged(option, value) {
-        this.saveSettings();
-        if (this.debug) console.log(option, value);
+    handleSpecialOptions(option, value) {
         if (option === "shader") {
-            try {
-                this.Module.FS.unlink("/shader/shader.glslp");
-            } catch(e) {}
-            if (value === "disabled") {
-                this.gameManager.toggleShader(0);
-                return;
-            }
-            this.Module.FS.writeFile("/shader/shader.glslp", window.EJS_SHADERS[value]);
-            this.gameManager.toggleShader(1);
-            return;
+            this.enableShader(value);
         } else if (option === "disk") {
             this.gameManager.setCurrentDisk(value);
-            return;
         } else if (option === "virtual-gamepad") {
             this.toggleVirtualGamepad(value !== "disabled");
         } else if (option === "virtual-gamepad-left-handed-mode") {
@@ -3901,9 +3890,204 @@ class EmulatorJS {
             if (this.rewindEnabled) {
                 this.gameManager.setRewindGranularity(parseInt(value));
             }
+        } else if (option === "vsync") {
+            this.gameManager.setVSync(value === "enabled");
+        } else if (option === "videoRotation") {
+            this.gameManager.setVideoRotation(value);
         }
+    }
+    menuOptionChanged(option, value) {
+        this.saveSettings();
+        if (this.debug) console.log(option, value);
+        if (!this.gameManager) return;
+        this.handleSpecialOptions(option, value);
         this.gameManager.setVariable(option, value);
         this.saveSettings();
+    }
+    setupDisksMenu() {
+        this.disksMenu = this.createElement("div");
+        this.disksMenu.classList.add("ejs_settings_parent");
+        const nested = this.createElement("div");
+        nested.classList.add("ejs_settings_transition");
+        this.disks = {};
+        
+        const home = this.createElement("div");
+        home.style.overflow = "auto";
+        const menus = [];
+        this.handleDisksResize = () => {
+            let needChange = false;
+            if (this.disksMenu.style.display !== "") {
+                this.disksMenu.style.opacity = "0";
+                this.disksMenu.style.display = "";
+                needChange = true;
+            }
+            let height = this.elements.parent.getBoundingClientRect().height;
+            let w2 = this.diskParent.parentElement.getBoundingClientRect().width;
+            let disksX = this.diskParent.getBoundingClientRect().x;
+            if (w2 > window.innerWidth) disksX += (w2 - window.innerWidth);
+            const onTheRight = disksX > (w2-15)/2;
+            if (height > 375) height = 375;
+            home.style['max-height'] = (height - 95) + "px";
+            nested.style['max-height'] = (height - 95) + "px";
+            for (let i=0; i<menus.length; i++) {
+                menus[i].style['max-height'] = (height - 95) + "px";
+            }
+            this.disksMenu.classList.toggle("ejs_settings_center_left", !onTheRight);
+            this.disksMenu.classList.toggle("ejs_settings_center_right", onTheRight);
+            if (needChange) {
+                this.disksMenu.style.display = "none";
+                this.disksMenu.style.opacity = "";
+            }
+        }
+        
+        home.classList.add("ejs_setting_menu");
+        nested.appendChild(home);
+        let funcs = [];
+        this.changeDiskOption = (title, newValue) => {
+            this.disks[title] = newValue;
+            funcs.forEach(e => e(title));
+        }
+        let allOpts = {};
+        
+        const addToMenu = (title, id, options, defaultOption) => {
+            const span = this.createElement("span");
+            span.innerText = title;
+            
+            const current = this.createElement("div");
+            current.innerText = "";
+            current.classList.add("ejs_settings_main_bar_selected");
+            span.appendChild(current);
+            
+            const menu = this.createElement("div");
+            menus.push(menu);
+            menu.style.overflow  = "auto";
+            menu.setAttribute("hidden", "");
+            const button = this.createElement("button");
+            const goToHome = () => {
+                const homeSize = this.getElementSize(home);
+                nested.style.width = (homeSize.width+20) + "px";
+                nested.style.height = homeSize.height + "px";
+                menu.setAttribute("hidden", "");
+                home.removeAttribute("hidden");
+            }
+            this.addEventListener(button, "click", goToHome);
+            
+            button.type = "button";
+            button.classList.add("ejs_back_button");
+            menu.appendChild(button);
+            const pageTitle = this.createElement("span");
+            pageTitle.innerText = title;
+            pageTitle.classList.add("ejs_menu_text_a");
+            button.appendChild(pageTitle);
+            
+            const optionsMenu = this.createElement("div");
+            optionsMenu.classList.add("ejs_setting_menu");
+            
+            let buttons = [];
+            let opts = options;
+            if (Array.isArray(options)) {
+                opts = {};
+                for (let i=0; i<options.length; i++) {
+                    opts[options[i]] = options[i];
+                }
+            }
+            allOpts[id] = opts;
+            
+            funcs.push((title) => {
+                if (id !== title) return;
+                for (let j=0; j<buttons.length; j++) {
+                    buttons[j].classList.toggle("ejs_option_row_selected", buttons[j].getAttribute("ejs_value") === this.disks[id]);
+                }
+                this.menuOptionChanged(id, this.disks[id]);
+                current.innerText = opts[this.disks[id]];
+            });
+            
+            for (const opt in opts) {
+                const optionButton = this.createElement("button");
+                buttons.push(optionButton);
+                optionButton.setAttribute("ejs_value", opt);
+                optionButton.type = "button";
+                optionButton.value = opts[opt];
+                optionButton.classList.add("ejs_option_row");
+                optionButton.classList.add("ejs_button_style");
+                
+                this.addEventListener(optionButton, "click", (e) => {
+                    this.disks[id] = opt;
+                    for (let j=0; j<buttons.length; j++) {
+                        buttons[j].classList.remove("ejs_option_row_selected");
+                    }
+                    optionButton.classList.add("ejs_option_row_selected");
+                    this.menuOptionChanged(id, opt);
+                    current.innerText = opts[opt];
+                    goToHome();
+                })
+                if (defaultOption === opt) {
+                    optionButton.classList.add("ejs_option_row_selected");
+                    this.menuOptionChanged(id, opt);
+                    current.innerText = opts[opt];
+                }
+                
+                const msg = this.createElement("span");
+                msg.innerText = opts[opt];
+                optionButton.appendChild(msg);
+                
+                optionsMenu.appendChild(optionButton);
+            }
+            
+            home.appendChild(optionsMenu);
+            
+            nested.appendChild(menu);
+        }
+        
+        if (this.gameManager.getDiskCount() > 1) {
+            const diskLabels = {};
+            let isM3U = false;
+            let disks = {};
+            if (this.fileName.split(".").pop() === "m3u") {
+                disks = this.gameManager.Module.FS.readFile(this.fileName, { encoding: 'utf8' }).split("\n");
+                isM3U = true;
+            }
+            for (let i=0; i<this.gameManager.getDiskCount(); i++) {
+                // default if not an m3u loaded rom is "Disk x"
+                // if m3u, then use the file name without the extension
+                // if m3u, and contains a |, then use the string after the | as the disk label
+                if (!isM3U) {
+                    diskLabels[i.toString()] = "Disk "+(i+1);
+                } else {
+                    // get disk name from m3u
+                    const diskLabelValues = disks[i].split("|");
+                    // remove the file extension from the disk file name
+                    let diskLabel = diskLabelValues[0].replace("." + diskLabelValues[0].split(".").pop(), "");
+                    if (diskLabelValues.length >= 2) {
+                        // has a label - use that instead
+                        diskLabel = diskLabelValues[1];
+                    }
+                    diskLabels[i.toString()] = diskLabel;
+                }
+            }
+            addToMenu(this.localization("Disk"), "disk", diskLabels, this.gameManager.getCurrentDisk().toString());
+        }
+        
+        this.disksMenu.appendChild(nested);
+        
+        this.diskParent.appendChild(this.disksMenu);
+        this.diskParent.style.position = "relative";
+        
+        const homeSize = this.getElementSize(home);
+        nested.style.width = (homeSize.width+20) + "px";
+        nested.style.height = homeSize.height + "px";
+        
+        this.disksMenu.style.display = "none";
+        
+        if (this.debug) {
+            console.log("Available core options", allOpts);
+        }
+        
+        if (this.config.defaultOptions) {
+            for (const k in this.config.defaultOptions) {
+                this.changeDiskOption(k, this.config.defaultOptions[k]);
+            }
+        }
     }
     setupSettingsMenu() {
         this.settingsMenu = this.createElement("div");
@@ -3911,10 +4095,65 @@ class EmulatorJS {
         const nested = this.createElement("div");
         nested.classList.add("ejs_settings_transition");
         this.settings = {};
-        
-        const home = this.createElement("div");
-        home.style.overflow = "auto";
         const menus = [];
+        
+        const createSettingParent = (child, title, parentElement) => {
+            const rv = this.createElement("div");
+            rv.style.overflow = "auto";
+            rv.classList.add("ejs_setting_menu");
+
+            if (child) {
+                const menuOption = this.createElement("div");
+                menuOption.classList.add("ejs_settings_main_bar");
+                const span = this.createElement("span");
+                span.innerText = title;
+
+                menuOption.appendChild(span);
+                parentElement.appendChild(menuOption);
+
+                const menu = this.createElement("div");
+                menus.push(menu);
+                menu.style.overflow  = "auto";
+                menu.setAttribute("hidden", "");
+                const button = this.createElement("button");
+                const goToHome = () => {
+                    const homeSize = this.getElementSize(parentElement);
+                    nested.style.width = (homeSize.width+20) + "px";
+                    nested.style.height = homeSize.height + "px";
+                    menu.setAttribute("hidden", "");
+                    parentElement.removeAttribute("hidden");
+                }
+                this.addEventListener(menuOption, "click", (e) => {
+                    const targetSize = this.getElementSize(menu);
+                    nested.style.width = (targetSize.width+20) + "px";
+                    nested.style.height = targetSize.height + "px";
+                    menu.removeAttribute("hidden");
+                    parentElement.setAttribute("hidden", "");
+                })
+                this.addEventListener(button, "click", goToHome);
+
+                button.type = "button";
+                button.classList.add("ejs_back_button");
+                menu.appendChild(button);
+                const pageTitle = this.createElement("span");
+                pageTitle.innerText = title;
+                pageTitle.classList.add("ejs_menu_text_a");
+                button.appendChild(pageTitle);
+/*
+                const optionsMenu = this.createElement("div");
+                optionsMenu.classList.add("ejs_setting_menu");
+
+                menu.appendChild(optionsMenu);*/
+
+                menu.appendChild(rv);
+                nested.appendChild(menu);
+            }
+
+            return rv;
+        }
+
+        const home = createSettingParent();
+
         this.handleSettingsResize = () => {
             let needChange = false;
             if (this.settingsMenu.style.display !== "") {
@@ -3940,17 +4179,22 @@ class EmulatorJS {
                 this.settingsMenu.style.opacity = "";
             }
         }
-        
-        home.classList.add("ejs_setting_menu");
         nested.appendChild(home);
+
         let funcs = [];
-        this.changeSettingOption = (title, newValue) => {
-            this.settings[title] = newValue;
+        let settings = {};
+        this.changeSettingOption = (title, newValue, startup) => {
+            if (startup !== true) {
+                this.settings[title] = newValue;
+            }
+            settings[title] = newValue;
             funcs.forEach(e => e(title));
         }
         let allOpts = {};
         
-        const addToMenu = (title, id, options, defaultOption) => {
+        const addToMenu = (title, id, options, defaultOption, parentElement, useParentParent) => {
+            parentElement = parentElement || home;
+            const transitionElement = useParentParent ? parentElement.parentElement : parentElement;
             const menuOption = this.createElement("div");
             menuOption.classList.add("ejs_settings_main_bar");
             const span = this.createElement("span");
@@ -3962,7 +4206,7 @@ class EmulatorJS {
             span.appendChild(current);
             
             menuOption.appendChild(span);
-            home.appendChild(menuOption);
+            parentElement.appendChild(menuOption);
             
             const menu = this.createElement("div");
             menus.push(menu);
@@ -3970,18 +4214,18 @@ class EmulatorJS {
             menu.setAttribute("hidden", "");
             const button = this.createElement("button");
             const goToHome = () => {
-                const homeSize = this.getElementSize(home);
+                const homeSize = this.getElementSize(transitionElement);
                 nested.style.width = (homeSize.width+20) + "px";
                 nested.style.height = homeSize.height + "px";
                 menu.setAttribute("hidden", "");
-                home.removeAttribute("hidden");
+                transitionElement.removeAttribute("hidden");
             }
             this.addEventListener(menuOption, "click", (e) => {
                 const targetSize = this.getElementSize(menu);
                 nested.style.width = (targetSize.width+20) + "px";
                 nested.style.height = targetSize.height + "px";
                 menu.removeAttribute("hidden");
-                home.setAttribute("hidden", "");
+                transitionElement.setAttribute("hidden", "");
             })
             this.addEventListener(button, "click", goToHome);
             
@@ -3995,8 +4239,6 @@ class EmulatorJS {
             
             const optionsMenu = this.createElement("div");
             optionsMenu.classList.add("ejs_setting_menu");
-            //optionsMenu.style["max-height"] = "385px";
-            //optionsMenu.style.overflow  = "auto";
             
             let buttons = [];
             let opts = options;
@@ -4011,10 +4253,10 @@ class EmulatorJS {
             funcs.push((title) => {
                 if (id !== title) return;
                 for (let j=0; j<buttons.length; j++) {
-                    buttons[j].classList.toggle("ejs_option_row_selected", buttons[j].getAttribute("ejs_value") === this.settings[id]);
+                    buttons[j].classList.toggle("ejs_option_row_selected", buttons[j].getAttribute("ejs_value") === settings[id]);
                 }
-                this.menuOptionChanged(id, this.settings[id]);
-                current.innerText = opts[this.settings[id]];
+                this.menuOptionChanged(id, settings[id]);
+                current.innerText = opts[settings[id]];
             });
             
             for (const opt in opts) {
@@ -4027,7 +4269,7 @@ class EmulatorJS {
                 optionButton.classList.add("ejs_button_style");
                 
                 this.addEventListener(optionButton, "click", (e) => {
-                    this.settings[id] = opt;
+                    this.changeSettingOption(id, opt);
                     for (let j=0; j<buttons.length; j++) {
                         buttons[j].classList.remove("ejs_option_row_selected");
                     }
@@ -4053,68 +4295,112 @@ class EmulatorJS {
             
             nested.appendChild(menu);
         }
-        //addToMenu("Test", 'test', {a:1, b:2, c:3}, 2);
-        //addToMenu("Test2", 'test_2', [4, 5, 6]);
-        //addToMenu("Testertthgfd", 'booger', [7, 8, 9]);
-        
-        if (this.gameManager.getDiskCount() > 1) {
-            const diskLabels = {};
-            for (let i=0; i<this.gameManager.getDiskCount(); i++) {
-                diskLabels[i.toString()] = "Disk "+(i+1);
-            }
-            addToMenu(this.localization("Disk"), "disk", diskLabels, this.gameManager.getCurrentDisk().toString());
+        const cores = this.getCores();
+        const core = cores[this.getCore(true)];
+        if (core && core.length > 1) {
+            addToMenu(this.localization("Core" + " (" + this.localization('Requires restart') + ")"), 'retroarch_core', core, this.getCore(), home);
         }
-        
-        if (window.EJS_SHADERS) {
-            addToMenu(this.localization('Shaders'), 'shader', {
-                'disabled': this.localization("Disabled"),
+        if (typeof window.SharedArrayBuffer === "function" && !this.requiresThreads(this.getCore())) {
+            addToMenu(this.localization("Threads"), "ejs_threads", {
+                'enabled': this.localization("Enabled"),
+                'disabled': this.localization("Disabled")
+            }, this.config.threads ? "enabled" : "disabled", home);
+        }
+
+        const graphicsOptions = createSettingParent(true, "Graphics Settings", home);
+
+        if (this.config.shaders) {
+            const builtinShaders = {
                 '2xScaleHQ.glslp': this.localization("2xScaleHQ"),
                 '4xScaleHQ.glslp': this.localization("4xScaleHQ"),
-                'crt-easymode.glslp': this.localization('CRT easymode'),
                 'crt-aperture.glslp': this.localization('CRT aperture'),
+                'crt-beam': this.localization('CRT beam'),
+                'crt-caligari': this.localization('CRT caligari'),
+                'crt-easymode.glslp': this.localization('CRT easymode'),
                 'crt-geom.glslp': this.localization('CRT geom'),
-                'crt-mattias.glslp': this.localization('CRT mattias')
-            }, 'disabled');
+                'crt-lottes': this.localization('CRT lottes'),
+                'crt-mattias.glslp': this.localization('CRT mattias'),
+                'crt-yeetron': this.localization('CRT yeetron'),
+                'crt-zfast': this.localization('CRT zfast'),
+                'sabr': this.localization('SABR'),
+                'bicubic': this.localization('Bicubic'),
+                'mix-frames': this.localization('Mix frames'),
+            };
+            let shaderMenu = {
+                'disabled': this.localization("Disabled"),
+            };
+            for (const shaderName in this.config.shaders) {
+                if (builtinShaders[shaderName]) {
+                    shaderMenu[shaderName] = builtinShaders[shaderName];
+                } else {
+                    shaderMenu[shaderName] = shaderName;
+                }
+            }
+            addToMenu(this.localization('Shaders'), 'shader', shaderMenu, 'disabled', graphicsOptions, true);
+        }
+
+        if (this.supportsWebgl2 && !this.requiresWebGL2(this.getCore())) {
+            addToMenu(this.localization('WebGL2') + " (" + this.localization('Requires restart') + ")", 'webgl2Enabled', {
+                'enabled': this.localization("Enabled"),
+                'disabled': this.localization("Disabled")
+            }, this.webgl2Enabled ? "enabled" : "disabled", graphicsOptions, true);
         }
         
         addToMenu(this.localization('FPS'), 'fps', {
             'show': this.localization("show"),
             'hide': this.localization("hide")
-        }, 'hide');
+        }, 'hide', graphicsOptions, true);
         
-        addToMenu(this.localization('Fast Forward Ratio'), 'ff-ratio', [
-            "1.5", "2.0", "2.5", "3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "6.5", "7.0", "7.5", "8.0", "8.5", "9.0", "9.5", "10.0", "unlimited"
-        ], "3.0");
+        addToMenu(this.localization("VSync"), "vsync", {
+            'enabled': this.localization("Enabled"),
+            'disabled': this.localization("Disabled")
+        }, "enabled", graphicsOptions, true);
 
-        addToMenu(this.localization('Slow Motion Ratio'), 'sm-ratio', [
-            "1.5", "2.0", "2.5", "3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "6.5", "7.0", "7.5", "8.0", "8.5", "9.0", "9.5", "10.0"
-        ], "3.0");
+        addToMenu(this.localization('Video Rotation'), 'videoRotation', {
+            '0': "0 deg",
+            '1': "90 deg",
+            '2': "180 deg",
+            '3': "270 deg"
+        }, this.videoRotation.toString(), graphicsOptions, true);
+
+        const speedOptions = createSettingParent(true, "Speed Options", home);
 
         addToMenu(this.localization('Fast Forward'), 'fastForward', {
             'enabled': this.localization("Enabled"),
-            'disabled': this.localization("Disabled")
-        }, "disabled");
+                  'disabled': this.localization("Disabled")
+        }, "disabled", speedOptions, true);
+
+        addToMenu(this.localization('Fast Forward Ratio'), 'ff-ratio', [
+            "1.5", "2.0", "2.5", "3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "6.5", "7.0", "7.5", "8.0", "8.5", "9.0", "9.5", "10.0", "unlimited"
+        ], "3.0", speedOptions, true);
 
         addToMenu(this.localization('Slow Motion'), 'slowMotion', {
             'enabled': this.localization("Enabled"),
-            'disabled': this.localization("Disabled")
-        }, "disabled");
+                  'disabled': this.localization("Disabled")
+        }, "disabled", speedOptions, true);
 
-        addToMenu(this.localization('Rewind Enabled (requires restart)'), 'rewindEnabled', {
+        addToMenu(this.localization('Slow Motion Ratio'), 'sm-ratio', [
+            "1.5", "2.0", "2.5", "3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "6.5", "7.0", "7.5", "8.0", "8.5", "9.0", "9.5", "10.0"
+        ], "3.0", speedOptions, true);
+
+        addToMenu(this.localization('Rewind Enabled' + " (" + this.localization('Requires restart') + ")"), 'rewindEnabled', {
             'enabled': this.localization("Enabled"),
             'disabled': this.localization("Disabled")
-        }, 'disabled');
+        }, 'disabled', speedOptions, true);
 
-        addToMenu(this.localization('Rewind Granularity'), 'rewind-granularity', [
-            '1', '3', '6', '12', '25', '50', '100'
-        ], '6');
+        if (this.rewindEnabled) {
+            addToMenu(this.localization('Rewind Granularity'), 'rewind-granularity', [
+                '1', '3', '6', '12', '25', '50', '100'
+            ], '6', speedOptions, true);
+        }
 
         if (this.saveInBrowserSupported()) {
-            addToMenu(this.localization('Save State Slot'), 'save-state-slot', ["1", "2", "3", "4", "5", "6", "7", "8", "9"], "1");
+            const saveStateOpts = createSettingParent(true, "Save States", home);
+            addToMenu(this.localization('Save State Slot'), 'save-state-slot', ["1", "2", "3", "4", "5", "6", "7", "8", "9"], "1", saveStateOpts, true);
             addToMenu(this.localization('Save State Location'), 'save-state-location', {
                 'download': this.localization("Download"),
                 'browser': this.localization("Keep in Browser")
-            }, 'download');
+            }, 'download', saveStateOpts, true);
         }
         
         if (this.touch || navigator.maxTouchPoints > 0) {
@@ -4127,11 +4413,13 @@ class EmulatorJS {
                 'disabled': this.localization("Disabled")
             }, 'disabled');
         }
+
         let coreOpts;
         try {
             coreOpts = this.gameManager.getCoreOptions();
         } catch(e){}
         if (coreOpts) {
+            const coreOptions = createSettingParent(true, "Core Options", home);
             coreOpts.split('\n').forEach((line, index) => {
                 let option = line.split('; ');
                 let name = option[0];
@@ -4141,11 +4429,39 @@ class EmulatorJS {
                 if (options.length === 1) return;
                 let availableOptions = {};
                 for (let i=0; i<options.length; i++) {
-                    availableOptions[options[i]] = this.localization(options[i], this.settingsLanguage);
+                    availableOptions[options[i]] = this.localization(options[i], this.config.settingsLanguage);
                 }
-                addToMenu(this.localization(optionName, this.settingsLanguage),
+                addToMenu(this.localization(optionName, this.config.settingsLanguage),
                           name.split("|")[0], availableOptions,
-                          (name.split("|").length > 1) ? name.split("|")[1] : options[0].replace('(Default) ', ''));
+                          (name.split("|").length > 1) ? name.split("|")[1] : options[0].replace('(Default) ', ''),
+                          coreOptions,
+                          true);
+            })
+        }
+        
+
+        /*
+        this.retroarchOpts = [
+            {
+                title: "Audio Latency", // String
+                name: "audio_latency", // String - value to be set in retroarch.cfg
+                // options should ALWAYS be strings here...
+                options: ["8", "16", "32", "64", "128"], // values
+                options: {"8": "eight", "16": "sixteen", "32": "thirty-two", "64": "sixty-four", "128": "one hundred-twenty-eight"}, // This also works
+                default: "128", // Default
+                isString: false // Surround value with quotes in retroarch.cfg file?
+            }
+        ];*/
+
+        if (this.retroarchOpts && Array.isArray(this.retroarchOpts)) {
+            const retroarchOptsMenu = createSettingParent(true, "RetroArch Options" + " (" + this.localization('Requires restart') + ")", home);
+            this.retroarchOpts.forEach(option => {
+                addToMenu(this.localization(option.title, this.config.settingsLanguage),
+                          option.name,
+                          option.options,
+                          option.default,
+                          retroarchOptsMenu,
+                          true);
             })
         }
         
@@ -4166,7 +4482,7 @@ class EmulatorJS {
         
         if (this.config.defaultOptions) {
             for (const k in this.config.defaultOptions) {
-                this.changeSettingOption(k, this.config.defaultOptions[k]);
+                this.changeSettingOption(k, this.config.defaultOptions[k], true);
             }
         }
     }
@@ -4905,7 +5221,7 @@ class EmulatorJS {
         const msg = this.createElement("div");
         msg.style["padding-top"] = "0px";
         msg.style["padding-bottom"] = "15px";
-        msg.innerText = "Note that some cheats require a restart to disable.";
+        msg.innerText = this.localization("Note that some cheats require a restart to disable");
         body.appendChild(msg);
         const rows = this.createElement("div");
         body.appendChild(rows);
@@ -4913,6 +5229,7 @@ class EmulatorJS {
         this.elements.cheatRows = rows;
     }
     updateCheatUI() {
+        if (!this.gameManager) return;
         this.elements.cheatRows.innerHTML = "";
         
         const addToMenu = (desc, checked, code, is_permanent, i) => {
@@ -4955,7 +5272,36 @@ class EmulatorJS {
         }
     }
     cheatChanged(checked, code, index) {
+        if (!this.gameManager) return;
         this.gameManager.setCheat(index, checked, code);
+    }
+
+    enableShader(name) {
+        if (!this.gameManager) return;
+        try {
+            this.Module.FS.unlink("/shader/shader.glslp");
+        } catch(e) {}
+
+        if (name === "disabled" || !this.config.shaders[name]) {
+            this.gameManager.toggleShader(0);
+            return;
+        }
+
+        const shaderConfig = this.config.shaders[name];
+
+        if (typeof shaderConfig === 'string') {
+            this.Module.FS.writeFile("/shader/shader.glslp", shaderConfig, {}, 'w+');
+        } else {
+            const shader = shaderConfig.shader;
+            this.Module.FS.writeFile('/shader/shader.glslp', shader.type === 'base64' ? atob(shader.value) : shader.value, {}, 'w+');
+            if (shaderConfig.resources && shaderConfig.resources.length) {
+                shaderConfig.resources.forEach(resource => {
+                    this.Module.FS.writeFile(`/shader/${resource.name}`, resource.type === 'base64' ? atob(resource.value) : resource.value, {}, 'w+');
+                });
+            }
+        }
+
+        this.gameManager.toggleShader(1);
     }
 
     collectScreenRecordingMediaTracks(canvasEl, fps) {
@@ -4969,8 +5315,8 @@ class EmulatorJS {
         }
 
         let audioTrack = null;
-        if (window.AL && window.AL.currentCtx && window.AL.currentCtx.audioCtx) {
-            const alContext = window.AL.currentCtx;
+        if (this.Module.AL && this.Module.AL.currentCtx && this.Module.AL.currentCtx.audioCtx) {
+            const alContext = this.Module.AL.currentCtx;
             const audioContext = alContext.audioCtx;
 
             const gainNodes = [];
