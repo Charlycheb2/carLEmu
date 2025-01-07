@@ -7,7 +7,7 @@ permissions:
   contents: read
 jobs:
   run:
-    if: github.repository == 'EmulatorJS/EmulatorJS'
+    if: github.repository == 'carLEmu'
     runs-on: emulatorjs-server
     steps:
       - name: Checkout
